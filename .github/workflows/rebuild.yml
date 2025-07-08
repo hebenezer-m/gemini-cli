@@ -14,6 +14,11 @@ jobs:
       image: debian:bookworm-slim
 
     steps:
+      - name: Instalar dependências do sistema
+        run: |
+          apt-get update
+          apt-get install -y git jq
+
       - name: Checkout do código
         uses: actions/checkout@v4
 
@@ -23,13 +28,12 @@ jobs:
           node-version: "22.x"
           cache: "npm"
 
-      - name: Instalar dependências
-        run: npm install
-
       - name: Corrigir package.json do web-server
         run: |
-          sed -i /"test":/a   "build": "echo \"No build required\"", packages/web-server/package.json
-          sed -i s/1"/1",/ packages/web-server/package.json
+          echo "{\"name\": \"web-server\",\"version\": \"1.0.0\",\"main\": \"index.js\",\"scripts\": {\"test\": \"echo \\\"Error: no test specified\\\" && exit 1\",\"build\": \"echo \\\"No build required\\\"\"},\"keywords\": [],\"author\": \"\",\"license\": \"ISC\",\"description\": \"\"}" > packages/web-server/package.json
+
+      - name: Instalar dependências do Node
+        run: npm install
 
       - name: Executar Preflight (Build, Test, Lint)
         run: npm run preflight
