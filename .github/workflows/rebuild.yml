@@ -30,6 +30,7 @@ jobs:
 
       - name: Corrigir package.json do web-server
         run: |
+          mkdir -p packages/web-server
           echo "{\"name\": \"web-server\",\"version\": \"1.0.0\",\"main\": \"index.js\",\"scripts\": {\"test\": \"echo \\\"Error: no test specified\\\" && exit 1\",\"build\": \"echo \\\"No build required\\\"\"},\"keywords\": [],\"author\": \"\",\"license\": \"ISC\",\"description\": \"\"}" > packages/web-server/package.json
 
       - name: Instalar dependências do Node
