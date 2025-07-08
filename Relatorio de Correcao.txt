@@ -1,0 +1,105 @@
+Relatório de Correção: Aviso de Depreciação do Módulo punycode no gemini-cli
+Problema: Ao executar o gemini-cli, um aviso de depreciação (node:XXXX) [DEP0040] DeprecationWarning: The 'punycode' module is deprecated. Please use a userland alternative instead. era exibido. Este aviso indicava que o módulo punycode nativo do Node.js, que está obsoleto, estava sendo carregado.
+
+Diagnóstico e Investigação (Passo a Passo):
+
+Tentativa de Rastreamento Inicial: Solicitou-se ao usuário que executasse o gemini-cli com a flag node --trace-deprecation para obter um stack trace que identificasse a origem da chamada ao módulo depreciado. Devido à instalação global, essa etapa foi inicialmente adiada.
+
+Busca por Uso Direto no Código:
+
+Verificou-se com grep se havia usos diretos de require('punycode') ou from 'punycode' no código fonte do projeto (packages/).
+Resultado: Nenhuma ocorrência encontrada no código principal, exceto em um arquivo de documentação (PUNYCODE_DEPRECATION_FIX.md).
+Análise do Arquivo PUNYCODE_DEPRECATION_FIX.md:
+
+Este arquivo revelou que o problema já havia sido tratado anteriormente.
+Indicava que as dependências jsdom e eslint (ou suas sub-dependências) eram as prováveis causadoras, e que a solução anterior foi atualizar essas dependências.
+Listagem de Dependências punycode:
+
+O comando npm ls punycode foi executado.
+Resultado: Mostrou que jsdom@26.1.0 (via whatwg-url -> tr46) e eslint@9.29.0 (via ajv -> uri-js) dependiam do pacote punycode@2.3.1 (a versão userland correta).
+Inferência: Embora as dependências corretas estivessem listadas, algo ainda estava fazendo o Node.js carregar o módulo nativo obsoleto.
+Verificação de Versões das Dependências Principais:
+
+Consultou-se o registro NPM para as versões mais recentes de jsdom e eslint.
+Resultado: jsdom já estava na @latest (26.1.0). eslint tinha uma atualização patch disponível (9.30.1, enquanto a instalada era 9.29.0).
+Tentativa de Correção 1: Atualizar eslint:
+
+eslint foi atualizado para 9.30.1 (npm install eslint@latest).
+Teste: O gemini-cli (executado no sandbox com node --trace-deprecation bundle/gemini.js --help) ainda exibia o warning. O stack trace fornecido não era específico o suficiente para apontar a origem exata da chamada.
+Busca por require ou from 'punycode' nas Dependências Suspeitas:
+
+grep foi usado para procurar usos diretos de punycode em node_modules/jsdom, node_modules/tr46, e node_modules/whatwg-url.
+Resultado: Nenhuma correspondência direta encontrada, tornando o mistério mais profundo.
+Tentativa de Correção 2: overrides no package.json:
+
+Baseado na sugestão implícita no PUNYCODE_DEPRECATION_FIX.md (que mencionava overridden), uma seção overrides foi adicionada ao package.json raiz para forçar punycode: "2.3.1" em toda a árvore de dependências.
+npm install foi executado para aplicar o override.
+Teste: O warning ainda persistia.
+Análise do esbuild.config.js e Tentativa de Correção 3: alias no esbuild:
+
+A hipótese foi que o bundler esbuild poderia estar resolvendo punycode para o módulo nativo durante o processo de bundling, antes que os overrides do npm pudessem ter efeito completo na resolução do bundler.
+Adicionou-se uma configuração alias: { punycode: 'punycode/' } ao esbuild.config.js. A barra no final (punycode/) é uma convenção para ajudar esbuild a distinguir entre o módulo nativo e o pacote npm.
+npm run bundle foi executado para reconstruir o gemini-cli com a nova configuração.
+Teste Final da Correção com alias:
+
+Executou-se node --trace-deprecation bundle/gemini.js --help.
+Resultado: O aviso de depreciação do punycode desapareceu.
+Executou-se npm test (testes unitários e de integração do projeto).
+Resultado: Todos os testes passaram, indicando que a correção não introduziu regressões.
+Solução Implementada:
+
+A solução final que resolveu o aviso de depreciação foi adicionar um alias à configuração do esbuild no arquivo esbuild.config.js:
+
+// esbuild.config.js
+esbuild
+  .build({
+    // ... outras configurações ...
+    alias: {
+      punycode: 'punycode/', // Força a resolução para o pacote npm 'punycode'
+    },
+  })
+  .catch(() => process.exit(1));
+Isso garante que, durante o processo de bundling, qualquer tentativa de importar punycode seja resolvida para a versão userland do pacote punycode (que já era uma dependência transitiva através de jsdom e eslint).
+
+As outras alterações (atualização do eslint e adição de overrides no package.json) foram mantidas como boas práticas e potenciais salvaguardas, embora não tenham sido a solução direta para este warning específico.
+
+Instruções para um Agente Replicar a Correção em seu Próprio Ambiente:
+
+Um agente (como eu, Jules) precisaria das seguintes ferramentas e capacidades:
+
+read_files(filepaths: list[str]): Para ler package.json, esbuild.config.js, PUNYCODE_DEPRECATION_FIX.md.
+run_in_bash_session com capacidade de executar npm (para npm ls punycode, npm install, npm run bundle, npm test) e node (para executar o script com --trace-deprecation).
+replace_with_git_merge_diff (ou overwrite_file_with_block): Para modificar package.json e esbuild.config.js.
+view_text_website(url: str): Para consultar o registro NPM por versões de pacotes.
+grep(pattern: str): Para pesquisar no código.
+set_plan(plan: str) e plan_step_complete(message: str): Para gerenciamento do plano.
+submit(branch_name: str, commit_message: str): Para submeter a correção final.
+Passos para o Agente:
+
+Planejamento Inicial: Definir um plano similar ao que foi seguido, começando pela coleta de informações (logs, grep, npm ls).
+set_plan("1. Investigar origem do warning punycode... 2. Tentar atualizar dependências... 3. Tentar overrides... 4. Tentar alias no esbuild... 5. Testar... 6. Submeter.")
+Coleta de Informação:
+run_in_bash_session com node --trace-deprecation [comando_para_rodar_gemini]. (Se o stack trace não for claro, prosseguir).
+grep por punycode no código do projeto.
+read_files(['PUNYCODE_DEPRECATION_FIX.md']) se existir.
+run_in_bash_session com npm ls punycode.
+Análise e Tentativas de Correção (Iterativo):
+Verificar versões de dependências (view_text_website para registry.npmjs.org).
+Tentativa 1: Atualizar Dependências Relevantes (ex: eslint).
+run_in_bash_session com npm install dependencia@latest.
+run_in_bash_session com node --trace-deprecation bundle/gemini.js --help (ou comando similar) para testar.
+Tentativa 2: Adicionar overrides ao package.json.
+read_files(['package.json']).
+replace_with_git_merge_diff para adicionar a seção overrides.
+run_in_bash_session com npm install.
+Testar novamente.
+Tentativa 3: Adicionar alias ao esbuild.config.js.
+read_files(['esbuild.config.js']).
+replace_with_git_merge_diff para adicionar a seção alias.
+run_in_bash_session com npm run bundle.
+Testar novamente.
+Teste de Regressão:
+run_in_bash_session com npm test.
+Submissão:
+submit(branch_name="fix/punycode-deprecation-esbuild-v2", commit_message="Fix: Resolve punycode deprecation via esbuild alias (v2)") (usar nome de branch e mensagem apropriados).
+O agente marcaria cada etapa do plano como completa (plan_step_complete) à medida que avança.
