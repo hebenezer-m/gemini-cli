@@ -183,3 +183,24 @@ Only write high-value comments if at all. Avoid talking to the user through comm
 ## General style requirements
 
 Use hyphens instead of underscores in flag names (e.g. `my-flag` instead of `my_flag`).
+
+## Funcionalidades da CLI
+
+### Gerenciamento de Histórico de Chat
+
+O Gemini CLI agora inclui funcionalidades aprimoradas para gerenciar o histórico de conversas. Isso permite que os usuários salvem e restaurem sessões de chat para referência futura.
+
+#### Comando `/save-chat`
+
+**Propósito:** Salva o histórico completo da sessão de chat atual em um arquivo local.
+
+**Uso:** `/save-chat <nome-do-arquivo> [senha]`
+
+- `<nome-do-arquivo>`: O nome do arquivo onde o histórico será salvo. O histórico é salvo no formato JSONL (JSON Lines).
+- `[senha]`: (Opcional) Uma senha para criptografar o arquivo de histórico. **Nota:** A funcionalidade de criptografia ainda está pendente de implementação.
+
+**Exemplo:**
+` /save-chat minha_sessao_de_trabalho`
+` /save-chat sessao_secreta_com_senha minha_senha_forte`
+
+**Status Atual:** O comando salva o histórico em JSONL. A criptografia com senha está planejada, mas ainda não foi implementada.

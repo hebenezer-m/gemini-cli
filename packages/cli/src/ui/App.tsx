@@ -17,6 +17,7 @@ import {
   type Key as InkKeyType,
 } from 'ink';
 import { StreamingState, type HistoryItem, MessageType } from './types.js';
+import { HistoryProvider } from './contexts/HistoryContext.js';
 import { useTerminalSize } from './hooks/useTerminalSize.js';
 import { useGeminiStream } from './hooks/useGeminiStream.js';
 import { useLoadingIndicator } from './hooks/useLoadingIndicator.js';
@@ -83,7 +84,9 @@ interface AppProps {
 
 export const AppWrapper = (props: AppProps) => (
   <SessionStatsProvider>
-    <App {...props} />
+    <HistoryProvider>
+      <App {...props} />
+    </HistoryProvider>
   </SessionStatsProvider>
 );
 
@@ -591,7 +594,7 @@ const App = ({ config, settings, startupWarnings = [] }: AppProps) => {
               <Header terminalWidth={terminalWidth} />
               {!settings.merged.hideTips && <Tips config={config} />}
             </Box>,
-            ...history.map((h) => (
+            ...history.map((h: HistoryItem) => (
               <HistoryItemDisplay
                 terminalWidth={mainAreaWidth}
                 availableTerminalHeight={staticAreaMaxItemHeight}
@@ -614,8 +617,6 @@ const App = ({ config, settings, startupWarnings = [] }: AppProps) => {
                   constrainHeight ? availableTerminalHeight : undefined
                 }
                 terminalWidth={mainAreaWidth}
-                // TODO(taehykim): It seems like references to ids aren't necessary in
-                // HistoryItemDisplay. Refactor later. Use a fake id for now.
                 item={{ ...item, id: 0 }}
                 isPending={true}
                 config={config}
@@ -793,13 +794,13 @@ const App = ({ config, settings, startupWarnings = [] }: AppProps) => {
               marginBottom={1}
             >
               {history.find(
-                (item) =>
+                (item: HistoryItem) =>
                   item.type === 'error' && item.text?.includes(initError),
               )?.text ? (
                 <Text color={Colors.AccentRed}>
                   {
                     history.find(
-                      (item) =>
+                      (item: HistoryItem) =>
                         item.type === 'error' && item.text?.includes(initError),
                     )?.text
                   }

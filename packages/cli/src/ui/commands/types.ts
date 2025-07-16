@@ -6,8 +6,8 @@
 
 import { Config, GitService, Logger } from '@google/gemini-cli-core';
 import { LoadedSettings } from '../../config/settings.js';
-import { UseHistoryManagerReturn } from '../hooks/useHistoryManager.js';
 import { SessionStatsState } from '../contexts/SessionContext.js';
+import { HistoryItem, UseHistoryManagerReturn } from '../types.js';
 
 // Grouped dependencies for clarity and easier mocking
 export interface CommandContext {
@@ -21,11 +21,7 @@ export interface CommandContext {
   };
   // UI state and history management
   ui: {
-    // TODO - As more commands are add some additions may be needed or reworked using this new context.
-    // Ex.
-    // history: HistoryItem[];
-    // pendingHistoryItems: HistoryItemWithoutId[];
-
+    history: HistoryItem[];
     /** Adds a new item to the history display. */
     addItem: UseHistoryManagerReturn['addItem'];
     /** Clears all history items and the console screen. */

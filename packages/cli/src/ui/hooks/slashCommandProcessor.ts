@@ -95,12 +95,12 @@ export const useSlashCommandProcessor = (
   }, [config]);
 
   const [pendingCompressionItemRef, setPendingCompressionItem] =
-    useStateAndRef<HistoryItemWithoutId | null>(null);
+    useStateAndRef<HistoryItem | null>(null);
 
   const pendingHistoryItems = useMemo(() => {
-    const items: HistoryItemWithoutId[] = [];
+    const items: HistoryItem[] = [];
     if (pendingCompressionItemRef.current != null) {
-      items.push(pendingCompressionItemRef.current);
+      items.push({ ...pendingCompressionItemRef.current, id: Date.now() });
     }
     return items;
   }, [pendingCompressionItemRef]);
@@ -162,6 +162,7 @@ export const useSlashCommandProcessor = (
         logger,
       },
       ui: {
+        history,
         addItem,
         clear: () => {
           clearItems();
@@ -179,6 +180,7 @@ export const useSlashCommandProcessor = (
       settings,
       gitService,
       logger,
+      history,
       addItem,
       clearItems,
       refreshStatic,
@@ -552,7 +554,9 @@ export const useSlashCommandProcessor = (
           }
 
           // Filter out MCP tools by checking if they have a serverName property
+          console.log('All tools:', tools);
           const geminiTools = tools.filter((tool) => !('serverName' in tool));
+          console.log('Gemini tools (after filtering):', geminiTools);
 
           let message = 'Available Gemini CLI tools:\n\n';
 
@@ -837,6 +841,48 @@ export const useSlashCommandProcessor = (
           const { sessionStartTime } = session.stats;
           const wallDuration = now.getTime() - sessionStartTime.getTime();
 
+          // Auto-save conversation before quitting
+          const chat = await config?.getGeminiClient()?.getChat();
+          if (chat) {
+            const logger = new Logger(config?.getSessionId() || '');
+            await logger.initialize();
+            const historyToSave = chat.getHistory();
+            if (historyToSave.length > 0) {
+              const timestampTag = `auto-save-${now.toISOString().replace(/[:.]/g, '-')}`;
+              addMessage({
+                type: MessageType.INFO,
+                content: `Attempting to auto-save conversation with tag: ${timestampTag}.`,
+                timestamp: new Date(),
+              });
+              try {
+                await logger.saveCheckpoint(historyToSave, timestampTag);
+                addMessage({
+                  type: MessageType.INFO,
+                  content: `Conversation automatically saved with tag: ${timestampTag}.`,
+                  timestamp: new Date(),
+                });
+              } catch (error) {
+                addMessage({
+                  type: MessageType.ERROR,
+                  content: `Failed to auto-save conversation: ${error instanceof Error ? error.message : String(error)}`,
+                  timestamp: new Date(),
+                });
+              }
+            } else {
+              addMessage({
+                type: MessageType.INFO,
+                content: 'No conversation found to auto-save.',
+                timestamp: new Date(),
+              });
+            }
+          } else {
+            addMessage({
+              type: MessageType.ERROR,
+              content: 'Chat client not available for auto-save.',
+              timestamp: new Date(),
+            });
+          }
+
           setQuittingMessages([
             {
               type: 'user',
@@ -876,6 +922,7 @@ export const useSlashCommandProcessor = (
               originalTokenCount: null,
               newTokenCount: null,
             },
+            id: Date.now(), // Adicionar o ID aqui
           });
           try {
             const compressed = await config!
