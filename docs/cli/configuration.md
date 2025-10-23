@@ -527,8 +527,9 @@ the `excludedProjectEnvVars` setting in your `settings.json` file.
     for setup details.
 - **`GITHUB_MCP_PAT`**:
   - Alternative GitHub Personal Access Token variable used by some extensions.
-  - Required when using extensions like `@gemini-cli-extensions/security` that
-    integrate GitHub MCP functionality.
+  - Required when using the official GitHub MCP extension (installed via
+    `gemini extensions install https://github.com/github/github-mcp-server`) or
+    any other extension that expects this variable.
   - Should be set in your `~/.gemini/.env` file for persistent configuration:
     ```bash
     # In ~/.gemini/.env

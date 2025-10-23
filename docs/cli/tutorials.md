@@ -76,10 +76,12 @@ export GITHUB_PERSONAL_ACCESS_TOKEN="pat_YourActualGitHubTokenHere"
 Gemini CLI uses this value in the `mcpServers` configuration that you defined in
 the `settings.json` file.
 
-**Option 2: Using extensions (e.g., @gemini-cli-extensions/security)**
+**Option 2: Using extensions (e.g., the GitHub MCP extension)**
 
 Some extensions expect a different variable such as `GITHUB_MCP_PAT`. If you're
-using an extension that requires this variable, set it in `~/.gemini/.env`:
+using the official GitHub MCP extension
+(`gemini extensions install https://github.com/github/github-mcp-server`) or
+any other extension that requires this variable, set it in `~/.gemini/.env`:
 
 ```bash
 # In ~/.gemini/.env
