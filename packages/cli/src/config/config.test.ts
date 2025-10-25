@@ -2497,3 +2497,127 @@ describe('Telemetry configuration via environment variables', () => {
     expect(config.getTelemetryLogPromptsEnabled()).toBe(false);
   });
 });
+
+describe('loadCliConfig extension MCP server environment variable resolution', () => {
+  const originalArgv = process.argv;
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    vi.resetAllMocks();
+    vi.mocked(os.homedir).mockReturnValue('/mock/home/user');
+    process.env.GEMINI_API_KEY = 'test-api-key';
+  });
+
+  afterEach(() => {
+    process.argv = originalArgv;
+    process.env = originalEnv;
+    vi.restoreAllMocks();
+  });
+
+  it('should resolve environment variables in extension MCP server headers', async () => {
+    process.env.GITHUB_MCP_PAT = 'test-github-token-123';
+    process.argv = ['node', 'script.js'];
+    const argv = await parseArguments();
+    
+    const extensions: Extension[] = [
+      {
+        path: '/path/to/extension',
+        config: {
+          name: 'github-extension',
+          version: '1.0.0',
+          mcpServers: {
+            github: {
+              command: 'docker',
+              args: ['run', '-i', '--rm'],
+              headers: {
+                Authorization: 'Bearer $GITHUB_MCP_PAT',
+              },
+            },
+          },
+        },
+        contextFiles: [],
+      },
+    ];
+
+    const settings: Settings = {};
+    const config = await loadCliConfig(settings, extensions, 'test-session', argv);
+    const mcpServers = config.getMcpServers();
+    
+    expect(mcpServers.github).toBeDefined();
+    expect(mcpServers.github.headers).toBeDefined();
+    expect(mcpServers.github.headers?.Authorization).toBe('Bearer test-github-token-123');
+    
+    delete process.env.GITHUB_MCP_PAT;
+  });
+
+  it('should resolve environment variables in extension MCP server env', async () => {
+    process.env.MY_API_KEY = 'test-api-key-456';
+    process.argv = ['node', 'script.js'];
+    const argv = await parseArguments();
+    
+    const extensions: Extension[] = [
+      {
+        path: '/path/to/extension',
+        config: {
+          name: 'custom-extension',
+          version: '1.0.0',
+          mcpServers: {
+            customServer: {
+              command: 'node',
+              args: ['server.js'],
+              env: {
+                API_KEY: '$MY_API_KEY',
+                SERVER_URL: 'https://api.example.com/${MY_API_KEY}',
+              },
+            },
+          },
+        },
+        contextFiles: [],
+      },
+    ];
+
+    const settings: Settings = {};
+    const config = await loadCliConfig(settings, extensions, 'test-session', argv);
+    const mcpServers = config.getMcpServers();
+    
+    expect(mcpServers.customServer).toBeDefined();
+    expect(mcpServers.customServer.env).toBeDefined();
+    expect(mcpServers.customServer.env?.API_KEY).toBe('test-api-key-456');
+    expect(mcpServers.customServer.env?.SERVER_URL).toBe('https://api.example.com/test-api-key-456');
+    
+    delete process.env.MY_API_KEY;
+  });
+
+  it('should keep original value if environment variable is not set', async () => {
+    process.argv = ['node', 'script.js'];
+    const argv = await parseArguments();
+    
+    const extensions: Extension[] = [
+      {
+        path: '/path/to/extension',
+        config: {
+          name: 'test-extension',
+          version: '1.0.0',
+          mcpServers: {
+            testServer: {
+              command: 'node',
+              args: ['server.js'],
+              headers: {
+                Authorization: 'Bearer $UNDEFINED_VAR',
+              },
+            },
+          },
+        },
+        contextFiles: [],
+      },
+    ];
+
+    const settings: Settings = {};
+    const config = await loadCliConfig(settings, extensions, 'test-session', argv);
+    const mcpServers = config.getMcpServers();
+    
+    expect(mcpServers.testServer).toBeDefined();
+    expect(mcpServers.testServer.headers).toBeDefined();
+    expect(mcpServers.testServer.headers?.Authorization).toBe('Bearer $UNDEFINED_VAR');
+  });
+});
