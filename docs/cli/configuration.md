@@ -338,6 +338,8 @@ The CLI keeps a history of shell commands you run. To avoid conflicts between di
 
 Environment variables are a common way to configure applications, especially for sensitive information like API keys or for settings that might change between environments.
 
+For information on how to configure environment variables for extensions, please refer to the [Extension Environment Variables](../extension.md#extension-environment-variables) section in the extensions documentation.
+
 The CLI automatically loads environment variables from an `.env` file. The loading order is:
 
 1.  `.env` file in the current working directory.

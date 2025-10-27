@@ -41,6 +41,27 @@ The `gemini-extension.json` file contains the configuration for the extension. T
 
 When Gemini CLI starts, it loads all the extensions and merges their configurations. If there are any conflicts, the workspace configuration takes precedence.
 
+### Extension Environment Variables
+
+Some extensions may require you to set environment variables for them to function correctly. For example, an extension that connects to a service like GitHub will likely need an API token.
+
+These variables are not configured within the `gemini-extension.json` file itself, but in a separate `.env` file. The Gemini CLI will automatically load environment variables from a `.gemini/.env` file in your project's root directory.
+
+#### Example: Configuring the GitHub MCP Extension
+
+The `github/github-mcp-server` extension for GitHub requires a Personal Access Token (PAT) to authenticate with the GitHub API. This token should be stored in an environment variable named `GITHUB_MCP_PAT`.
+
+To configure this:
+
+1.  Create a file named `.env` inside the `.gemini` directory in your project root: `.gemini/.env`.
+2.  Add the following line to this file, replacing `your_personal_access_token` with your actual GitHub PAT:
+
+    ```
+    GITHUB_MCP_PAT=your_personal_access_token
+    ```
+
+The Gemini CLI will automatically load this variable when it starts, allowing the extension to authenticate successfully. Refer to the [CLI Configuration documentation](./cli/configuration.md#environment-variables--env-files) for more general information on how the CLI handles `.env` files.
+
 ## Extension Commands
 
 Extensions can provide [custom commands](./cli/commands.md#custom-commands) by placing TOML files in a `commands/` subdirectory within the extension directory. These commands follow the same format as user and project custom commands and use standard naming conventions.
