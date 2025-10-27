@@ -2560,7 +2560,7 @@ describe('loadCliConfig extension MCP server environment variable resolution', (
   it('should resolve environment variables in extension MCP server env', async () => {
     process.env.MY_API_KEY = 'test-api-key-456';
     process.argv = ['node', 'script.js'];
-    const argv = await parseArguments();
+    const argv = await parseArguments({} as Settings);
     
     const extensions: GeminiCLIExtension[] = [
       {
