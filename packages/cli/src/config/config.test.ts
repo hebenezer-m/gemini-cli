@@ -2522,7 +2522,7 @@ describe('loadCliConfig extension MCP server environment variable resolution', (
   it('should resolve environment variables in extension MCP server headers', async () => {
     process.env.GITHUB_MCP_PAT = 'test-github-token-123';
     process.argv = ['node', 'script.js'];
-    const argv = await parseArguments();
+    const argv = await parseArguments({} as Settings);
     
     const extensions: GeminiCLIExtension[] = [
       {
