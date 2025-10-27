@@ -2597,7 +2597,7 @@ describe('loadCliConfig extension MCP server environment variable resolution', (
 
   it('should keep original value if environment variable is not set', async () => {
     process.argv = ['node', 'script.js'];
-    const argv = await parseArguments();
+    const argv = await parseArguments({} as Settings);
     
     const extensions: GeminiCLIExtension[] = [
       {
