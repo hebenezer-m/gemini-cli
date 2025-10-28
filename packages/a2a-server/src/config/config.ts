@@ -21,7 +21,6 @@ import {
   DEFAULT_GEMINI_EMBEDDING_MODEL,
   DEFAULT_GEMINI_MODEL,
   type GeminiCLIExtension,
-  type ExtensionLoader,
   debugLogger,
 } from '@google/gemini-cli-core';
 
@@ -31,10 +30,10 @@ import { type AgentSettings, CoderAgentEvent } from '../types.js';
 
 export async function loadConfig(
   settings: Settings,
-  extensionLoader: ExtensionLoader,
+  extensions: GeminiCLIExtension[],
   taskId: string,
 ): Promise<Config> {
-  const mcpServers = mergeMcpServers(settings, extensionLoader.getExtensions());
+  const mcpServers = mergeMcpServers(settings, extensions);
   const workspaceDir = process.cwd();
   const adcFilePath = process.env['GOOGLE_APPLICATION_CREDENTIALS'];
 
@@ -72,7 +71,7 @@ export async function loadConfig(
     },
     ideMode: false,
     folderTrust: settings.folderTrust === true,
-    extensionLoader,
+    extensions,
   };
 
   const fileService = new FileDiscoveryService(workspaceDir);
@@ -81,7 +80,7 @@ export async function loadConfig(
     [workspaceDir],
     false,
     fileService,
-    extensionLoader,
+    extensions,
     settings.folderTrust === true,
   );
   configParams.userMemory = memoryContent;

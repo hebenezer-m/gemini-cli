@@ -31,9 +31,8 @@ export async function handleLink(args: InstallArgs) {
       workspaceDir,
       requestConsent: requestConsentNonInteractive,
       requestSetting: promptForSetting,
-      settings: loadSettings(workspaceDir).merged,
+      loadedSettings: loadSettings(workspaceDir),
     });
-    await extensionManager.loadExtensions();
     const extensionName =
       await extensionManager.installOrUpdateExtension(installMetadata);
     debugLogger.log(

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/** @vitest-environment jsdom */
+
 import {
   describe,
   it,
@@ -13,8 +15,7 @@ import {
   type MockedFunction,
   type Mock,
 } from 'vitest';
-import { act } from 'react';
-import { renderHook } from '../../test-utils/render.js';
+import { renderHook, act } from '@testing-library/react';
 import { useAutoAcceptIndicator } from './useAutoAcceptIndicator.js';
 
 import { Config, ApprovalMode } from '@google/gemini-cli-core';

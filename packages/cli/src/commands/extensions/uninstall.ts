@@ -23,9 +23,8 @@ export async function handleUninstall(args: UninstallArgs) {
       workspaceDir,
       requestConsent: requestConsentNonInteractive,
       requestSetting: promptForSetting,
-      settings: loadSettings(workspaceDir).merged,
+      loadedSettings: loadSettings(workspaceDir),
     });
-    await extensionManager.loadExtensions();
     await extensionManager.uninstallExtension(args.name, false);
     debugLogger.log(`Extension "${args.name}" successfully uninstalled.`);
   } catch (error) {

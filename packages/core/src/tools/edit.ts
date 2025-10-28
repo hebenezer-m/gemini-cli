@@ -7,7 +7,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as Diff from 'diff';
-import process from 'node:process';
 import type {
   ToolCallConfirmationDetails,
   ToolEditConfirmationDetails,
@@ -505,9 +504,7 @@ Expectation for required parameters:
         properties: {
           file_path: {
             description:
-              process.platform === 'win32'
-                ? "The absolute path to the file to modify (e.g., 'C:\\Users\\project\\file.txt'). Must be an absolute path."
-                : "The absolute path to the file to modify (e.g., '/home/user/project/file.txt'). Must start with '/'.",
+              "The absolute path to the file to modify. Must start with '/'.",
             type: 'string',
           },
           old_string: {

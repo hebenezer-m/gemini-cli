@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/** @vitest-environment jsdom */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Mock, MockInstance } from 'vitest';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { act } from 'react';
-import { renderHook } from '../../test-utils/render.js';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useGeminiStream } from './useGeminiStream.js';
 import { useKeypress } from './useKeypress.js';
 import * as atCommandProcessor from './atCommandProcessor.js';
@@ -33,11 +34,10 @@ import {
   ToolErrorType,
   ToolConfirmationOutcome,
   tokenLimit,
-  debugLogger,
 } from '@google/gemini-cli-core';
 import type { Part, PartListUnion } from '@google/genai';
 import type { UseHistoryManagerReturn } from './useHistoryManager.js';
-import type { SlashCommandProcessorResult } from '../types.js';
+import type { HistoryItem, SlashCommandProcessorResult } from '../types.js';
 import { MessageType, StreamingState } from '../types.js';
 import type { LoadedSettings } from '../../config/settings.js';
 
@@ -231,9 +231,8 @@ describe('useGeminiStream', () => {
     mockUseReactToolScheduler.mockReturnValue([
       [], // Default to empty array for toolCalls
       mockScheduleToolCalls,
-      mockMarkToolsAsSubmitted,
-      vi.fn(), // setToolCallsForDisplay
       mockCancelAllToolCalls,
+      mockMarkToolsAsSubmitted,
     ]);
 
     // Reset mocks for GeminiClient instance methods (startChat and sendMessageStream)
@@ -260,71 +259,38 @@ describe('useGeminiStream', () => {
     initialToolCalls: TrackedToolCall[] = [],
     geminiClient?: any,
   ) => {
-    const client = geminiClient || mockConfig.getGeminiClient();
-
-    const initialProps = {
-      client,
-      history: [],
-      addItem: mockAddItem as unknown as UseHistoryManagerReturn['addItem'],
-      config: mockConfig,
-      onDebugMessage: mockOnDebugMessage,
-      handleSlashCommand: mockHandleSlashCommand as unknown as (
-        cmd: PartListUnion,
-      ) => Promise<SlashCommandProcessorResult | false>,
-      shellModeActive: false,
-      loadedSettings: mockLoadedSettings,
-      toolCalls: initialToolCalls,
+    let currentToolCalls = initialToolCalls;
+    const setToolCalls = (newToolCalls: TrackedToolCall[]) => {
+      currentToolCalls = newToolCalls;
     };
 
+    mockUseReactToolScheduler.mockImplementation(() => [
+      currentToolCalls,
+      mockScheduleToolCalls,
+      mockCancelAllToolCalls,
+      mockMarkToolsAsSubmitted,
+    ]);
+
+    const client = geminiClient || mockConfig.getGeminiClient();
+
     const { result, rerender } = renderHook(
-      (props: typeof initialProps) => {
-        // This mock needs to be stateful. When setToolCallsForDisplay is called,
-        // it should trigger a rerender with the new state.
-        const mockSetToolCallsForDisplay = vi.fn((updater) => {
-          const newToolCalls =
-            typeof updater === 'function' ? updater(props.toolCalls) : updater;
-          rerender({ ...props, toolCalls: newToolCalls });
-        });
-
-        // Create a stateful mock for cancellation that updates the toolCalls state.
-        const statefulCancelAllToolCalls = vi.fn((...args) => {
-          // Call the original spy so `toHaveBeenCalled` checks still work.
-          mockCancelAllToolCalls(...args);
-
-          const newToolCalls = props.toolCalls.map((tc) => {
-            // Only cancel tools that are in a cancellable state.
-            if (
-              tc.status === 'awaiting_approval' ||
-              tc.status === 'executing' ||
-              tc.status === 'scheduled' ||
-              tc.status === 'validating'
-            ) {
-              // A real cancelled tool call has a response object.
-              // We need to simulate this to avoid type errors downstream.
-              return {
-                ...tc,
-                status: 'cancelled',
-                response: {
-                  callId: tc.request.callId,
-                  responseParts: [],
-                  resultDisplay: 'Request cancelled.',
-                },
-                responseSubmittedToGemini: true, // Mark as "processed"
-              } as any as TrackedCancelledToolCall;
-            }
-            return tc;
-          });
-          rerender({ ...props, toolCalls: newToolCalls });
-        });
-
-        mockUseReactToolScheduler.mockImplementation(() => [
-          props.toolCalls,
-          mockScheduleToolCalls,
-          mockMarkToolsAsSubmitted,
-          mockSetToolCallsForDisplay,
-          statefulCancelAllToolCalls, // Use the stateful mock
-        ]);
-
+      (props: {
+        client: any;
+        history: HistoryItem[];
+        addItem: UseHistoryManagerReturn['addItem'];
+        config: Config;
+        onDebugMessage: (message: string) => void;
+        handleSlashCommand: (
+          cmd: PartListUnion,
+        ) => Promise<SlashCommandProcessorResult | false>;
+        shellModeActive: boolean;
+        loadedSettings: LoadedSettings;
+        toolCalls?: TrackedToolCall[]; // Allow passing updated toolCalls
+      }) => {
+        // Update the mock's return value if new toolCalls are passed in props
+        if (props.toolCalls) {
+          setToolCalls(props.toolCalls);
+        }
         return useGeminiStream(
           props.client,
           props.history,
@@ -347,7 +313,19 @@ describe('useGeminiStream', () => {
         );
       },
       {
-        initialProps,
+        initialProps: {
+          client,
+          history: [],
+          addItem: mockAddItem as unknown as UseHistoryManagerReturn['addItem'],
+          config: mockConfig,
+          onDebugMessage: mockOnDebugMessage,
+          handleSlashCommand: mockHandleSlashCommand as unknown as (
+            cmd: PartListUnion,
+          ) => Promise<SlashCommandProcessorResult | false>,
+          shellModeActive: false,
+          loadedSettings: mockLoadedSettings,
+          toolCalls: initialToolCalls,
+        },
       },
     );
     return {
@@ -474,7 +452,7 @@ describe('useGeminiStream', () => {
 
     mockUseReactToolScheduler.mockImplementation((onComplete) => {
       capturedOnComplete = onComplete;
-      return [[], mockScheduleToolCalls, mockMarkToolsAsSubmitted, vi.fn()];
+      return [[], mockScheduleToolCalls, mockMarkToolsAsSubmitted];
     });
 
     renderHook(() =>
@@ -507,7 +485,7 @@ describe('useGeminiStream', () => {
       }
     });
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(mockMarkToolsAsSubmitted).toHaveBeenCalledTimes(1);
       expect(mockSendMessageStream).toHaveBeenCalledTimes(1);
     });
@@ -557,7 +535,7 @@ describe('useGeminiStream', () => {
 
     mockUseReactToolScheduler.mockImplementation((onComplete) => {
       capturedOnComplete = onComplete;
-      return [[], mockScheduleToolCalls, mockMarkToolsAsSubmitted, vi.fn()];
+      return [[], mockScheduleToolCalls, mockMarkToolsAsSubmitted];
     });
 
     renderHook(() =>
@@ -590,7 +568,7 @@ describe('useGeminiStream', () => {
       }
     });
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(mockMarkToolsAsSubmitted).toHaveBeenCalledWith(['1']);
       expect(client.addHistory).toHaveBeenCalledWith({
         role: 'user',
@@ -669,7 +647,7 @@ describe('useGeminiStream', () => {
 
     mockUseReactToolScheduler.mockImplementation((onComplete) => {
       capturedOnComplete = onComplete;
-      return [[], mockScheduleToolCalls, mockMarkToolsAsSubmitted, vi.fn()];
+      return [[], mockScheduleToolCalls, mockMarkToolsAsSubmitted];
     });
 
     renderHook(() =>
@@ -702,7 +680,7 @@ describe('useGeminiStream', () => {
       }
     });
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       // The tools should be marked as submitted locally
       expect(mockMarkToolsAsSubmitted).toHaveBeenCalledWith([
         'cancel-1',
@@ -782,7 +760,6 @@ describe('useGeminiStream', () => {
         currentToolCalls,
         mockScheduleToolCalls,
         mockMarkToolsAsSubmitted,
-        vi.fn(), // setToolCallsForDisplay
       ];
     });
 
@@ -820,7 +797,6 @@ describe('useGeminiStream', () => {
         completedToolCalls,
         mockScheduleToolCalls,
         mockMarkToolsAsSubmitted,
-        vi.fn(), // setToolCallsForDisplay
       ];
     });
 
@@ -840,7 +816,7 @@ describe('useGeminiStream', () => {
     });
 
     // 5. Wait for submitQuery to be called
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(mockSendMessageStream).toHaveBeenCalledWith(
         toolCallResponseParts,
         expect.any(AbortSignal),
@@ -889,7 +865,7 @@ describe('useGeminiStream', () => {
       });
 
       // Wait for the first part of the response
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(result.current.streamingState).toBe(StreamingState.Responding);
       });
 
@@ -897,7 +873,7 @@ describe('useGeminiStream', () => {
       simulateEscapeKeyPress();
 
       // Verify cancellation message is added
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockAddItem).toHaveBeenCalledWith(
           {
             type: MessageType.INFO,
@@ -1030,7 +1006,7 @@ describe('useGeminiStream', () => {
         result.current.submitQuery('long running query');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(result.current.streamingState).toBe(StreamingState.Responding);
       });
 
@@ -1055,7 +1031,7 @@ describe('useGeminiStream', () => {
       expect(result.current.streamingState).toBe(StreamingState.Idle);
     });
 
-    it('should cancel if a tool call is in progress', async () => {
+    it('should not cancel if a tool call is in progress (not just responding)', async () => {
       const toolCalls: TrackedToolCall[] = [
         {
           request: { callId: 'call1', name: 'tool1', args: {} },
@@ -1076,6 +1052,7 @@ describe('useGeminiStream', () => {
         } as TrackedExecutingToolCall,
       ];
 
+      const abortSpy = vi.spyOn(AbortController.prototype, 'abort');
       const { result } = renderTestHook(toolCalls);
 
       // State is `Responding` because a tool is running
@@ -1084,71 +1061,8 @@ describe('useGeminiStream', () => {
       // Try to cancel
       simulateEscapeKeyPress();
 
-      // The cancel function should be called
-      expect(mockCancelAllToolCalls).toHaveBeenCalled();
-    });
-
-    it('should cancel a request when a tool is awaiting confirmation', async () => {
-      const mockOnConfirm = vi.fn().mockResolvedValue(undefined);
-      const toolCalls: TrackedToolCall[] = [
-        {
-          request: {
-            callId: 'confirm-call',
-            name: 'some_tool',
-            args: {},
-            isClientInitiated: false,
-            prompt_id: 'prompt-id-1',
-          },
-          status: 'awaiting_approval',
-          responseSubmittedToGemini: false,
-          tool: {
-            name: 'some_tool',
-            description: 'a tool',
-            build: vi.fn().mockImplementation((_) => ({
-              getDescription: () => `Mock description`,
-            })),
-          } as any,
-          invocation: {
-            getDescription: () => `Mock description`,
-          } as unknown as AnyToolInvocation,
-          confirmationDetails: {
-            type: 'edit',
-            title: 'Confirm Edit',
-            onConfirm: mockOnConfirm,
-            fileName: 'file.txt',
-            filePath: '/test/file.txt',
-            fileDiff: 'fake diff',
-            originalContent: 'old',
-            newContent: 'new',
-          },
-        } as TrackedWaitingToolCall,
-      ];
-
-      const { result } = renderTestHook(toolCalls);
-
-      // State is `WaitingForConfirmation` because a tool is awaiting approval
-      expect(result.current.streamingState).toBe(
-        StreamingState.WaitingForConfirmation,
-      );
-
-      // Try to cancel
-      simulateEscapeKeyPress();
-
-      // The imperative cancel function should be called on the scheduler
-      expect(mockCancelAllToolCalls).toHaveBeenCalled();
-
-      // A cancellation message should be added to history
-      await vi.waitFor(() => {
-        expect(mockAddItem).toHaveBeenCalledWith(
-          expect.objectContaining({
-            text: 'Request cancelled.',
-          }),
-          expect.any(Number),
-        );
-      });
-
-      // The final state should be idle
-      expect(result.current.streamingState).toBe(StreamingState.Idle);
+      // Nothing should happen because the state is not `Responding`
+      expect(abortSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -1167,7 +1081,7 @@ describe('useGeminiStream', () => {
         await result.current.submitQuery('/memory add "test fact"');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockScheduleToolCalls).toHaveBeenCalledWith(
           [
             expect.objectContaining({
@@ -1194,7 +1108,7 @@ describe('useGeminiStream', () => {
         await result.current.submitQuery('/help');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockHandleSlashCommand).toHaveBeenCalledWith('/help');
         expect(mockScheduleToolCalls).not.toHaveBeenCalled();
         expect(mockSendMessageStream).not.toHaveBeenCalled(); // No LLM call made
@@ -1215,7 +1129,7 @@ describe('useGeminiStream', () => {
         await result.current.submitQuery('/my-custom-command');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockHandleSlashCommand).toHaveBeenCalledWith(
           '/my-custom-command',
         );
@@ -1250,7 +1164,7 @@ describe('useGeminiStream', () => {
         await result.current.submitQuery('/emptycmd');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockHandleSlashCommand).toHaveBeenCalledWith('/emptycmd');
         expect(localMockSendMessageStream).toHaveBeenCalledWith(
           '',
@@ -1268,7 +1182,7 @@ describe('useGeminiStream', () => {
         await result.current.submitQuery('// This is a line comment');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockHandleSlashCommand).not.toHaveBeenCalled();
         expect(localMockSendMessageStream).toHaveBeenCalledWith(
           '// This is a line comment',
@@ -1286,7 +1200,7 @@ describe('useGeminiStream', () => {
         await result.current.submitQuery('/* This is a block comment */');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockHandleSlashCommand).not.toHaveBeenCalled();
         expect(localMockSendMessageStream).toHaveBeenCalledWith(
           '/* This is a block comment */',
@@ -1324,7 +1238,7 @@ describe('useGeminiStream', () => {
         await result.current.submitQuery('/about');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockHandleSlashCommand).not.toHaveBeenCalled();
       });
     });
@@ -1368,7 +1282,7 @@ describe('useGeminiStream', () => {
 
       mockUseReactToolScheduler.mockImplementation((onComplete) => {
         capturedOnComplete = onComplete;
-        return [[], mockScheduleToolCalls, mockMarkToolsAsSubmitted, vi.fn()];
+        return [[], mockScheduleToolCalls, mockMarkToolsAsSubmitted];
       });
 
       renderHook(() =>
@@ -1401,7 +1315,7 @@ describe('useGeminiStream', () => {
         }
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockPerformMemoryRefresh).toHaveBeenCalledTimes(1);
       });
     });
@@ -1457,7 +1371,7 @@ describe('useGeminiStream', () => {
       });
 
       // 3. Assertion
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockParseAndFormatApiError).toHaveBeenCalledWith(
           'Rate limit exceeded',
           mockAuthType,
@@ -1709,8 +1623,8 @@ describe('useGeminiStream', () => {
     });
 
     it('should handle errors gracefully when auto-approving tool calls', async () => {
-      const debuggerSpy = vi
-        .spyOn(debugLogger, 'warn')
+      const consoleSpy = vi
+        .spyOn(console, 'error')
         .mockImplementation(() => {});
       const mockOnConfirmSuccess = vi.fn().mockResolvedValue(undefined);
       const mockOnConfirmError = vi
@@ -1791,12 +1705,12 @@ describe('useGeminiStream', () => {
       expect(mockOnConfirmError).toHaveBeenCalledTimes(1);
 
       // Error should be logged
-      expect(debuggerSpy).toHaveBeenCalledWith(
+      expect(consoleSpy).toHaveBeenCalledWith(
         'Failed to auto-approve tool call call2:',
         expect.any(Error),
       );
 
-      debuggerSpy.mockRestore();
+      consoleSpy.mockRestore();
     });
 
     it('should skip tool calls without confirmationDetails', async () => {
@@ -1990,7 +1904,7 @@ describe('useGeminiStream', () => {
       });
 
       // Check that the info message was added
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockAddItem).toHaveBeenCalledWith(
           {
             type: 'info',
@@ -2050,7 +1964,7 @@ describe('useGeminiStream', () => {
         });
 
         // Check that the message was added without suggestion
-        await vi.waitFor(() => {
+        await waitFor(() => {
           expect(mockAddItem).toHaveBeenCalledWith(
             {
               type: 'info',
@@ -2105,7 +2019,7 @@ describe('useGeminiStream', () => {
         });
 
         // Check that the message was added with suggestion
-        await vi.waitFor(() => {
+        await waitFor(() => {
           expect(mockAddItem).toHaveBeenCalledWith(
             {
               type: 'info',
@@ -2161,7 +2075,7 @@ describe('useGeminiStream', () => {
       });
 
       // Check that onCancelSubmit was called
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(onCancelSubmitSpy).toHaveBeenCalled();
       });
     });
@@ -2360,7 +2274,7 @@ describe('useGeminiStream', () => {
           await result.current.submitQuery(`Test ${reason}`);
         });
 
-        await vi.waitFor(() => {
+        await waitFor(() => {
           expect(mockAddItem).toHaveBeenCalledWith(
             {
               type: 'info',
@@ -2487,7 +2401,7 @@ describe('useGeminiStream', () => {
       });
 
       // Wait for the first response to complete
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockAddItem).toHaveBeenCalledWith(
           expect.objectContaining({
             type: 'gemini',
@@ -2520,7 +2434,7 @@ describe('useGeminiStream', () => {
       // We can verify this by checking that the LoadingIndicator would not show the previous thought
       // The actual thought state is internal to the hook, but we can verify the behavior
       // by ensuring the second response doesn't show the previous thought
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockAddItem).toHaveBeenCalledWith(
           expect.objectContaining({
             type: 'gemini',
@@ -2638,7 +2552,7 @@ describe('useGeminiStream', () => {
       });
 
       // Verify cancellation message was added
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockAddItem).toHaveBeenCalledWith(
           expect.objectContaining({
             type: 'info',
@@ -2696,7 +2610,7 @@ describe('useGeminiStream', () => {
       });
 
       // Verify error message was added
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockAddItem).toHaveBeenCalledWith(
           expect.objectContaining({
             type: 'error',
@@ -2747,7 +2661,7 @@ describe('useGeminiStream', () => {
         await result.current.submitQuery('test query');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(result.current.loopDetectionConfirmationRequest).not.toBeNull();
         expect(
           typeof result.current.loopDetectionConfirmationRequest?.onComplete,
@@ -2795,7 +2709,7 @@ describe('useGeminiStream', () => {
       });
 
       // Wait for confirmation request to be set
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(result.current.loopDetectionConfirmationRequest).not.toBeNull();
       });
 
@@ -2824,7 +2738,7 @@ describe('useGeminiStream', () => {
       );
 
       // Verify that the request was retried
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockSendMessageStream).toHaveBeenCalledTimes(2);
         expect(mockSendMessageStream).toHaveBeenNthCalledWith(
           2,
@@ -2860,7 +2774,7 @@ describe('useGeminiStream', () => {
       });
 
       // Wait for confirmation request to be set
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(result.current.loopDetectionConfirmationRequest).not.toBeNull();
       });
 
@@ -2907,7 +2821,7 @@ describe('useGeminiStream', () => {
         await result.current.submitQuery('first query');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(result.current.loopDetectionConfirmationRequest).not.toBeNull();
       });
 
@@ -2957,7 +2871,7 @@ describe('useGeminiStream', () => {
         await result.current.submitQuery('second query');
       });
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(result.current.loopDetectionConfirmationRequest).not.toBeNull();
       });
 
@@ -2980,7 +2894,7 @@ describe('useGeminiStream', () => {
       );
 
       // Verify that the request was retried
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockSendMessageStream).toHaveBeenCalledTimes(3); // 1st query, 2nd query, retry of 2nd query
         expect(mockSendMessageStream).toHaveBeenNthCalledWith(
           3,
@@ -3011,7 +2925,7 @@ describe('useGeminiStream', () => {
       });
 
       // Verify that the content was added to history before the loop detection dialog
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockAddItem).toHaveBeenCalledWith(
           expect.objectContaining({
             type: 'gemini',
@@ -3022,7 +2936,7 @@ describe('useGeminiStream', () => {
       });
 
       // Then verify loop detection confirmation request was set
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(result.current.loopDetectionConfirmationRequest).not.toBeNull();
       });
     });

@@ -4,113 +4,98 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
+import type {
+  CountTokensResponse,
   GenerateContentResponse,
-  type CountTokensResponse,
-  type GenerateContentParameters,
-  type CountTokensParameters,
+  GenerateContentParameters,
+  CountTokensParameters,
   EmbedContentResponse,
-  type EmbedContentParameters,
+  EmbedContentParameters,
 } from '@google/genai';
 import { promises } from 'node:fs';
 import type { ContentGenerator } from './contentGenerator.js';
 import type { UserTierId } from '../code_assist/types.js';
 import { safeJsonStringify } from '../utils/safeJsonStringify.js';
 
-export type FakeResponse =
-  | {
-      method: 'generateContent';
-      response: GenerateContentResponse;
-    }
-  | {
-      method: 'generateContentStream';
-      response: GenerateContentResponse[];
-    }
-  | {
-      method: 'countTokens';
-      response: CountTokensResponse;
-    }
-  | {
-      method: 'embedContent';
-      response: EmbedContentResponse;
-    };
+export type FakeResponses = {
+  generateContent: GenerateContentResponse[];
+  generateContentStream: GenerateContentResponse[][];
+  countTokens: CountTokensResponse[];
+  embedContent: EmbedContentResponse[];
+};
 
 // A ContentGenerator that responds with canned responses.
 //
 // Typically these would come from a file, provided by the `--fake-responses`
 // CLI argument.
 export class FakeContentGenerator implements ContentGenerator {
-  private callCounter = 0;
+  private responses: FakeResponses;
+  private callCounters = {
+    generateContent: 0,
+    generateContentStream: 0,
+    countTokens: 0,
+    embedContent: 0,
+  };
   userTier?: UserTierId;
 
-  constructor(private readonly responses: FakeResponse[]) {}
+  constructor(responses: FakeResponses) {
+    this.responses = {
+      generateContent: responses.generateContent ?? [],
+      generateContentStream: responses.generateContentStream ?? [],
+      countTokens: responses.countTokens ?? [],
+      embedContent: responses.embedContent ?? [],
+    };
+  }
 
   static async fromFile(filePath: string): Promise<FakeContentGenerator> {
     const fileContent = await promises.readFile(filePath, 'utf-8');
-    const responses = fileContent
-      .split('\n')
-      .filter((line) => line.trim() !== '')
-      .map((line) => JSON.parse(line) as FakeResponse);
+    const responses = JSON.parse(fileContent) as FakeResponses;
     return new FakeContentGenerator(responses);
   }
 
-  private getNextResponse<
-    M extends FakeResponse['method'],
-    R = Extract<FakeResponse, { method: M }>['response'],
-  >(method: M, request: unknown): R {
-    const response = this.responses[this.callCounter++];
+  private getNextResponse<K extends keyof FakeResponses>(
+    method: K,
+    request: unknown,
+  ): FakeResponses[K][number] {
+    const response = this.responses[method][this.callCounters[method]++];
     if (!response) {
       throw new Error(
         `No more mock responses for ${method}, got request:\n` +
           safeJsonStringify(request),
       );
     }
-    if (response.method !== method) {
-      throw new Error(
-        `Unexpected response type, next response was for ${response.method} but expected ${method}`,
-      );
-    }
-    return response.response as R;
+    return response;
   }
 
   async generateContent(
-    request: GenerateContentParameters,
+    _request: GenerateContentParameters,
     _userPromptId: string,
   ): Promise<GenerateContentResponse> {
-    return Object.setPrototypeOf(
-      this.getNextResponse('generateContent', request),
-      GenerateContentResponse.prototype,
-    );
+    return this.getNextResponse('generateContent', _request);
   }
 
   async generateContentStream(
-    request: GenerateContentParameters,
+    _request: GenerateContentParameters,
     _userPromptId: string,
   ): Promise<AsyncGenerator<GenerateContentResponse>> {
-    const responses = this.getNextResponse('generateContentStream', request);
+    const responses = this.getNextResponse('generateContentStream', _request);
     async function* stream() {
       for (const response of responses) {
-        yield Object.setPrototypeOf(
-          response,
-          GenerateContentResponse.prototype,
-        );
+        yield response;
       }
     }
     return stream();
   }
 
   async countTokens(
-    request: CountTokensParameters,
+    _request: CountTokensParameters,
   ): Promise<CountTokensResponse> {
-    return this.getNextResponse('countTokens', request);
+    return this.getNextResponse('countTokens', _request);
   }
 
   async embedContent(
-    request: EmbedContentParameters,
+    _request: EmbedContentParameters,
   ): Promise<EmbedContentResponse> {
-    return Object.setPrototypeOf(
-      this.getNextResponse('embedContent', request),
-      EmbedContentResponse.prototype,
-    );
+    return this.getNextResponse('embedContent', _request);
   }
 }

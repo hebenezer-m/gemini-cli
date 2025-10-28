@@ -91,7 +91,7 @@ export const memoryCommand: SlashCommand = {
                 config.getDebugMode(),
                 config.getFileService(),
                 settings.merged,
-                config.getExtensionLoader(),
+                config.getExtensions(),
                 config.isTrustedFolder(),
                 settings.merged.context?.importFormat || 'tree',
                 config.getFileFilteringOptions(),

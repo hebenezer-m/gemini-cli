@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/** @vitest-environment jsdom */
+
 /**
  *
  *
@@ -28,6 +30,7 @@ import { LoadedSettings, SettingScope } from '../../config/settings.js';
 import { VimModeProvider } from '../contexts/VimModeContext.js';
 import { KeypressProvider } from '../contexts/KeypressContext.js';
 import { act } from 'react';
+import { waitFor } from '@testing-library/react';
 import { saveModifiedSettings, TEST_ONLY } from '../../utils/settingsUtils.js';
 import {
   getSettingsSchema,
@@ -405,7 +408,7 @@ describe('SettingsDialog', () => {
       const { stdin, unmount, lastFrame } = render(component);
 
       // Wait for initial render and verify we're on Vim Mode (first setting)
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(lastFrame()).toContain('● Vim Mode');
       });
 
@@ -413,7 +416,7 @@ describe('SettingsDialog', () => {
       act(() => {
         stdin.write(TerminalKeys.DOWN_ARROW as string);
       });
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(lastFrame()).toContain('● Disable Auto Update');
       });
 
@@ -422,14 +425,14 @@ describe('SettingsDialog', () => {
         stdin.write(TerminalKeys.ENTER as string);
       });
       // Wait for the setting change to be processed
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           vi.mocked(saveModifiedSettings).mock.calls.length,
         ).toBeGreaterThan(0);
       });
 
       // Wait for the mock to be called
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(vi.mocked(saveModifiedSettings)).toHaveBeenCalled();
       });
 
@@ -467,7 +470,7 @@ describe('SettingsDialog', () => {
         await wait();
         stdin.write(TerminalKeys.ENTER as string);
         await wait();
-        await vi.waitFor(() => {
+        await waitFor(() => {
           expect(vi.mocked(saveModifiedSettings)).toHaveBeenCalled();
         });
 
@@ -504,7 +507,7 @@ describe('SettingsDialog', () => {
         await wait();
         stdin.write(TerminalKeys.ENTER as string);
         await wait();
-        await vi.waitFor(() => {
+        await waitFor(() => {
           expect(vi.mocked(saveModifiedSettings)).toHaveBeenCalled();
         });
 
@@ -593,7 +596,7 @@ describe('SettingsDialog', () => {
       );
 
       // Wait for initial render
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(lastFrame()).toContain('Vim Mode');
       });
 
@@ -665,7 +668,7 @@ describe('SettingsDialog', () => {
       );
 
       // Wait for initial render
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(lastFrame()).toContain('Hide Window Title');
       });
 
@@ -961,7 +964,7 @@ describe('SettingsDialog', () => {
         await wait(50);
       }
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           vi.mocked(saveModifiedSettings).mock.calls.length,
         ).toBeGreaterThan(0);
@@ -1021,7 +1024,7 @@ describe('SettingsDialog', () => {
         await wait(30);
       }
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           vi.mocked(saveModifiedSettings).mock.calls.length,
         ).toBeGreaterThan(0);
@@ -1138,7 +1141,7 @@ describe('SettingsDialog', () => {
       );
 
       // Wait for initial render
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(lastFrame()).toContain('Vim Mode');
       });
 
@@ -1200,7 +1203,7 @@ describe('SettingsDialog', () => {
       );
 
       // Wait for initial render
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(lastFrame()).toContain('Vim Mode');
       });
 

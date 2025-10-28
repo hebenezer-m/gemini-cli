@@ -54,10 +54,6 @@ export class Storage {
     return path.join(Storage.getGlobalGeminiDir(), 'memory.md');
   }
 
-  static getUserPoliciesDir(): string {
-    return path.join(Storage.getGlobalGeminiDir(), 'policies');
-  }
-
   static getGlobalTempDir(): string {
     return path.join(Storage.getGlobalGeminiDir(), TMP_DIR_NAME);
   }

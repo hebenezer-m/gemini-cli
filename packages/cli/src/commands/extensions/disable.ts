@@ -17,24 +17,20 @@ interface DisableArgs {
   scope?: string;
 }
 
-export async function handleDisable(args: DisableArgs) {
+export function handleDisable(args: DisableArgs) {
   const workspaceDir = process.cwd();
   const extensionManager = new ExtensionManager({
     workspaceDir,
     requestConsent: requestConsentNonInteractive,
     requestSetting: promptForSetting,
-    settings: loadSettings(workspaceDir).merged,
+    loadedSettings: loadSettings(workspaceDir),
   });
-  await extensionManager.loadExtensions();
 
   try {
     if (args.scope?.toLowerCase() === 'workspace') {
-      await extensionManager.disableExtension(
-        args.name,
-        SettingScope.Workspace,
-      );
+      extensionManager.disableExtension(args.name, SettingScope.Workspace);
     } else {
-      await extensionManager.disableExtension(args.name, SettingScope.User);
+      extensionManager.disableExtension(args.name, SettingScope.User);
     }
     debugLogger.log(
       `Extension "${args.name}" successfully disabled for scope "${args.scope}".`,

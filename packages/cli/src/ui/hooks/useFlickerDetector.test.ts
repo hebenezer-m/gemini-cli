@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { renderHook } from '../../test-utils/render.js';
+/** @vitest-environment jsdom */
+
+import { renderHook } from '@testing-library/react';
 import { vi, type Mock } from 'vitest';
 import { useFlickerDetector } from './useFlickerDetector.js';
 import { useConfig } from '../contexts/ConfigContext.js';
@@ -17,15 +19,10 @@ import { appEvents, AppEvent } from '../../utils/events.js';
 // Mock dependencies
 vi.mock('../contexts/ConfigContext.js');
 vi.mock('../contexts/UIStateContext.js');
-vi.mock('@google/gemini-cli-core', async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import('@google/gemini-cli-core')>();
-  return {
-    ...actual,
-    recordFlickerFrame: vi.fn(),
-    GEMINI_DIR: '.gemini',
-  };
-});
+vi.mock('@google/gemini-cli-core', () => ({
+  recordFlickerFrame: vi.fn(),
+  GEMINI_DIR: '.gemini',
+}));
 vi.mock('ink', async (importOriginal) => {
   const original = await importOriginal<typeof import('ink')>();
   return {

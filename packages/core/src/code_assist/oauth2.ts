@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Credentials, AuthClient, JWTInput } from 'google-auth-library';
+import type { Credentials } from 'google-auth-library';
 import {
   OAuth2Client,
   Compute,
   CodeChallengeMethod,
-  GoogleAuth,
 } from 'google-auth-library';
 import * as http from 'node:http';
 import url from 'node:url';
@@ -65,7 +64,7 @@ export interface OauthWebLogin {
   loginCompletePromise: Promise<void>;
 }
 
-const oauthClientPromises = new Map<AuthType, Promise<AuthClient>>();
+const oauthClientPromises = new Map<AuthType, Promise<OAuth2Client>>();
 
 function getUseEncryptedStorageFlag() {
   return process.env[FORCE_ENCRYPTED_FILE_ENV_VAR] === 'true';
@@ -74,28 +73,7 @@ function getUseEncryptedStorageFlag() {
 async function initOauthClient(
   authType: AuthType,
   config: Config,
-): Promise<AuthClient> {
-  const credentials = await fetchCachedCredentials();
-
-  if (
-    credentials &&
-    (credentials as { type?: string }).type ===
-      'external_account_authorized_user'
-  ) {
-    const auth = new GoogleAuth({
-      scopes: OAUTH_SCOPE,
-    });
-    const byoidClient = await auth.fromJSON({
-      ...credentials,
-      refresh_token: credentials.refresh_token ?? undefined,
-    });
-    const token = await byoidClient.getAccessToken();
-    if (token) {
-      debugLogger.debug('Created BYOID auth client.');
-      return byoidClient;
-    }
-  }
-
+): Promise<OAuth2Client> {
   const client = new OAuth2Client({
     clientId: OAUTH_CLIENT_ID,
     clientSecret: OAUTH_CLIENT_SECRET,
@@ -124,35 +102,20 @@ async function initOauthClient(
     }
   });
 
-  if (credentials) {
-    client.setCredentials(credentials as Credentials);
-    try {
-      // This will verify locally that the credentials look good.
-      const { token } = await client.getAccessToken();
-      if (token) {
-        // This will check with the server to see if it hasn't been revoked.
-        await client.getTokenInfo(token);
-
-        if (!userAccountManager.getCachedGoogleAccount()) {
-          try {
-            await fetchAndCacheUserInfo(client);
-          } catch (error) {
-            // Non-fatal, continue with existing auth.
-            debugLogger.warn(
-              'Failed to fetch user info:',
-              getErrorMessage(error),
-            );
-          }
-        }
-        debugLogger.log('Loaded cached credentials.');
-        return client;
+  // If there are cached creds on disk, they always take precedence
+  if (await loadCachedCredentials(client)) {
+    // Found valid cached credentials.
+    // Check if we need to retrieve Google Account ID or Email
+    if (!userAccountManager.getCachedGoogleAccount()) {
+      try {
+        await fetchAndCacheUserInfo(client);
+      } catch (error) {
+        // Non-fatal, continue with existing auth.
+        debugLogger.warn('Failed to fetch user info:', getErrorMessage(error));
       }
-    } catch (error) {
-      debugLogger.debug(
-        `Cached credentials are not valid:`,
-        getErrorMessage(error),
-      );
     }
+    debugLogger.log('Loaded cached credentials.');
+    return client;
   }
 
   // In Google Cloud Shell, we can use Application Default Credentials (ADC)
@@ -185,7 +148,7 @@ async function initOauthClient(
     for (let i = 0; !success && i < maxRetries; i++) {
       success = await authWithUserCode(client);
       if (!success) {
-        debugLogger.error(
+        console.error(
           '\nFailed to authenticate with user code.',
           i === maxRetries - 1 ? '' : 'Retrying...\n',
         );
@@ -215,17 +178,17 @@ async function initOauthClient(
       // in a minimal Docker container), it will emit an unhandled 'error' event,
       // causing the entire Node.js process to crash.
       childProcess.on('error', (error) => {
-        debugLogger.error(
-          `Failed to open browser with error:`,
-          getErrorMessage(error),
-          `\nPlease try running again with NO_BROWSER=true set.`,
+        console.error(
+          'Failed to open browser automatically. Please try running again with NO_BROWSER=true set.',
         );
+        console.error('Browser error details:', getErrorMessage(error));
       });
     } catch (err) {
-      debugLogger.error(
-        `Failed to open browser with error:`,
+      console.error(
+        'An unexpected error occurred while trying to open the browser:',
         getErrorMessage(err),
-        `\nPlease try running again with NO_BROWSER=true set.`,
+        '\nThis might be due to browser compatibility issues or system configuration.',
+        '\nPlease try running again with NO_BROWSER=true set for manual authentication.',
       );
       throw new FatalAuthenticationError(
         `Failed to open browser: ${getErrorMessage(err)}`,
@@ -255,7 +218,7 @@ async function initOauthClient(
 export async function getOauthClient(
   authType: AuthType,
   config: Config,
-): Promise<AuthClient> {
+): Promise<OAuth2Client> {
   if (!oauthClientPromises.has(authType)) {
     oauthClientPromises.set(authType, initOauthClient(authType, config));
   }
@@ -293,7 +256,7 @@ async function authWithUserCode(client: OAuth2Client): Promise<boolean> {
   });
 
   if (!code) {
-    debugLogger.error('Authorization code is required.');
+    console.error('Authorization code is required.');
     return false;
   }
 
@@ -305,7 +268,7 @@ async function authWithUserCode(client: OAuth2Client): Promise<boolean> {
     });
     client.setCredentials(tokens);
   } catch (error) {
-    debugLogger.error(
+    console.error(
       'Failed to authenticate with authorization code:',
       getErrorMessage(error),
     );
@@ -469,12 +432,15 @@ export function getAvailablePort(): Promise<number> {
   });
 }
 
-async function fetchCachedCredentials(): Promise<
-  Credentials | JWTInput | null
-> {
+async function loadCachedCredentials(client: OAuth2Client): Promise<boolean> {
   const useEncryptedStorage = getUseEncryptedStorageFlag();
   if (useEncryptedStorage) {
-    return await OAuthCredentialStorage.loadCredentials();
+    const credentials = await OAuthCredentialStorage.loadCredentials();
+    if (credentials) {
+      client.setCredentials(credentials);
+      return true;
+    }
+    return false;
   }
 
   const pathsToTry = [
@@ -484,8 +450,19 @@ async function fetchCachedCredentials(): Promise<
 
   for (const keyFile of pathsToTry) {
     try {
-      const keyFileString = await fs.readFile(keyFile, 'utf-8');
-      return JSON.parse(keyFileString);
+      const creds = await fs.readFile(keyFile, 'utf-8');
+      client.setCredentials(JSON.parse(creds));
+
+      // This will verify locally that the credentials look good.
+      const { token } = await client.getAccessToken();
+      if (!token) {
+        continue;
+      }
+
+      // This will check with the server to see if it hasn't been revoked.
+      await client.getTokenInfo(token);
+
+      return true;
     } catch (error) {
       // Log specific error for debugging, but continue trying other paths
       debugLogger.debug(
@@ -495,7 +472,7 @@ async function fetchCachedCredentials(): Promise<
     }
   }
 
-  return null;
+  return false;
 }
 
 async function cacheCredentials(credentials: Credentials) {
@@ -528,7 +505,7 @@ export async function clearCachedCredentialFile() {
     // Clear the in-memory OAuth client cache to force re-authentication
     clearOauthClientCache();
   } catch (e) {
-    debugLogger.warn('Failed to clear cached credentials:', e);
+    console.error('Failed to clear cached credentials:', e);
   }
 }
 
@@ -549,7 +526,7 @@ async function fetchAndCacheUserInfo(client: OAuth2Client): Promise<void> {
     );
 
     if (!response.ok) {
-      debugLogger.log(
+      console.error(
         'Failed to fetch user info:',
         response.status,
         response.statusText,
@@ -560,7 +537,7 @@ async function fetchAndCacheUserInfo(client: OAuth2Client): Promise<void> {
     const userInfo = await response.json();
     await userAccountManager.cacheGoogleAccount(userInfo.email);
   } catch (error) {
-    debugLogger.log('Error retrieving user info:', error);
+    console.error('Error retrieving user info:', error);
   }
 }
 

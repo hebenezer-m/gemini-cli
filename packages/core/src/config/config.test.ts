@@ -25,6 +25,8 @@ import {
 } from '../core/contentGenerator.js';
 import { GeminiClient } from '../core/client.js';
 import { GitService } from '../services/gitService.js';
+import { ClearcutLogger } from '../telemetry/clearcut-logger/clearcut-logger.js';
+
 import { ShellTool } from '../tools/shell.js';
 import { ReadFileTool } from '../tools/read-file.js';
 import { GrepTool } from '../tools/grep.js';
@@ -178,6 +180,10 @@ describe('Server Config (config.ts)', () => {
   beforeEach(() => {
     // Reset mocks if necessary
     vi.clearAllMocks();
+    vi.spyOn(
+      ClearcutLogger.prototype,
+      'logStartSessionEvent',
+    ).mockImplementation(() => undefined);
   });
 
   describe('initialize', () => {
@@ -426,6 +432,18 @@ describe('Server Config (config.ts)', () => {
         expect(config.getUsageStatisticsEnabled()).toBe(enabled);
       },
     );
+
+    it('logs the session start event', async () => {
+      const config = new Config({
+        ...baseParams,
+        usageStatisticsEnabled: true,
+      });
+      await config.refreshAuth(AuthType.USE_GEMINI);
+
+      expect(
+        ClearcutLogger.prototype.logStartSessionEvent,
+      ).toHaveBeenCalledOnce();
+    });
   });
 
   describe('Telemetry Settings', () => {

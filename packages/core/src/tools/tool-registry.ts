@@ -23,7 +23,6 @@ import { safeJsonStringify } from '../utils/safeJsonStringify.js';
 import type { EventEmitter } from 'node:events';
 import type { MessageBus } from '../confirmation-bus/message-bus.js';
 import { debugLogger } from '../utils/debugLogger.js';
-import { coreEvents } from '../utils/events.js';
 
 type ToolParams = Record<string, unknown>;
 
@@ -177,19 +176,10 @@ export class ToolRegistry {
   private tools: Map<string, AnyDeclarativeTool> = new Map();
   private config: Config;
   private mcpClientManager: McpClientManager;
-  private messageBus?: MessageBus;
 
   constructor(config: Config, eventEmitter?: EventEmitter) {
     this.config = config;
     this.mcpClientManager = new McpClientManager(this, eventEmitter);
-  }
-
-  setMessageBus(messageBus: MessageBus): void {
-    this.messageBus = messageBus;
-  }
-
-  getMessageBus(): MessageBus | undefined {
-    return this.messageBus;
   }
 
   /**
@@ -360,11 +350,8 @@ export class ToolRegistry {
           }
 
           if (code !== 0) {
-            coreEvents.emitFeedback(
-              'error',
-              `Tool discovery command failed with code ${code}.`,
-              stderr,
-            );
+            console.error(`Command failed with code ${code}`);
+            console.error(stderr);
             return reject(
               new Error(`Tool discovery command failed with exit code ${code}`),
             );

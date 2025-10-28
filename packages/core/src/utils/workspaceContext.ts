@@ -54,9 +54,7 @@ export class WorkspaceContext {
         listener();
       } catch (e) {
         // Don't let one listener break others.
-        debugLogger.warn(
-          `Error in WorkspaceContext listener: (${e instanceof Error ? e.message : String(e)})`,
-        );
+        console.error('Error in WorkspaceContext listener:', e);
       }
     }
   }

@@ -20,29 +20,26 @@ describe('Interactive Mode', () => {
   });
 
   it('should trigger chat compression with /compress command', async () => {
-    await rig.setup('interactive-compress-success', {
+    await rig.setup('interactive-compress-test', {
       fakeResponsesPath: join(
         import.meta.dirname,
-        'context-compress-interactive.compress.responses',
+        'context-compress-interactive.compress.json',
       ),
     });
 
     const run = await rig.runInteractive();
 
-    await run.sendKeys(
-      'Write a 200 word story about a robot. The story MUST end with the text THE_END followed by a period.',
-    );
-    await run.sendKeys('\r');
+    await run.type('Initial prompt');
+    await run.type('\r');
 
-    // Wait for the specific end marker.
-    await run.expectText('THE_END.', 30000);
+    await run.expectText('The initial response from the model', 5000);
 
     await run.type('/compress');
     await run.type('\r');
 
     const foundEvent = await rig.waitForTelemetryEvent(
       'chat_compression',
-      25000,
+      5000,
     );
     expect(foundEvent, 'chat_compression telemetry event was not found').toBe(
       true,
@@ -51,27 +48,24 @@ describe('Interactive Mode', () => {
     await run.expectText('Chat history compressed', 5000);
   });
 
-  // TODO: Context compression is broken and doesn't include the system
-  // instructions or tool counts, so it thinks compression is beneficial when
-  // it is in fact not.
-  it.skip('should handle compression failure on token inflation', async () => {
+  it('should handle compression failure on token inflation', async () => {
     await rig.setup('interactive-compress-failure', {
       fakeResponsesPath: join(
         import.meta.dirname,
-        'context-compress-interactive.compress-failure.responses',
+        'context-compress-interactive.compress-failure.json',
       ),
     });
 
     const run = await rig.runInteractive();
 
-    await run.type('Respond with exactly "Hello" followed by a period');
+    await run.type('Initial prompt');
     await run.type('\r');
 
-    await run.expectText('Hello.', 25000);
+    await run.expectText('The initial response from the model', 25000);
 
     await run.type('/compress');
     await run.type('\r');
-    await run.expectText('compression was not beneficial', 25000);
+    await run.expectText('compression was not beneficial', 5000);
 
     // Verify no telemetry event is logged for NOOP
     const foundEvent = await rig.waitForTelemetryEvent(
@@ -88,7 +82,7 @@ describe('Interactive Mode', () => {
     rig.setup('interactive-compress-empty', {
       fakeResponsesPath: join(
         import.meta.dirname,
-        'context-compress-interactive.compress-empty.responses',
+        'context-compress-interactive.compress-empty.json',
       ),
     });
 

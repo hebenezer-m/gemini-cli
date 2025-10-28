@@ -20,16 +20,14 @@ interface EnableArgs {
   scope?: string;
 }
 
-export async function handleEnable(args: EnableArgs) {
+export function handleEnable(args: EnableArgs) {
   const workingDir = process.cwd();
   const extensionManager = new ExtensionManager({
     workspaceDir: workingDir,
     requestConsent: requestConsentNonInteractive,
     requestSetting: promptForSetting,
-    settings: loadSettings(workingDir).merged,
+    loadedSettings: loadSettings(workingDir),
   });
-  await extensionManager.loadExtensions();
-
   try {
     if (args.scope?.toLowerCase() === 'workspace') {
       extensionManager.enableExtension(args.name, SettingScope.Workspace);

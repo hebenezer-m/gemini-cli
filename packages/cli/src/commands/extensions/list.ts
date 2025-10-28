@@ -19,9 +19,9 @@ export async function handleList() {
       workspaceDir,
       requestConsent: requestConsentNonInteractive,
       requestSetting: promptForSetting,
-      settings: loadSettings(workspaceDir).merged,
+      loadedSettings: loadSettings(workspaceDir),
     });
-    const extensions = await extensionManager.loadExtensions();
+    const extensions = extensionManager.loadExtensions();
     if (extensions.length === 0) {
       debugLogger.log('No extensions installed.');
       return;

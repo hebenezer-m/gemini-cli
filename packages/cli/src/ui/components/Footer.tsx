@@ -15,6 +15,7 @@ import { MemoryUsageDisplay } from './MemoryUsageDisplay.js';
 import { ContextUsageDisplay } from './ContextUsageDisplay.js';
 import { DebugProfiler } from './DebugProfiler.js';
 import { isDevelopment } from '../../utils/installationInfo.js';
+
 import { useUIState } from '../contexts/UIStateContext.js';
 import { useConfig } from '../contexts/ConfigContext.js';
 import { useSettings } from '../contexts/SettingsContext.js';
@@ -40,7 +41,7 @@ export const Footer: React.FC = () => {
     isTrustedFolder,
     mainAreaWidth,
   } = {
-    model: uiState.currentModel,
+    model: config.getModel(),
     targetDir: config.getTargetDir(),
     debugMode: config.getDebugMode(),
     branchName: uiState.branchName,

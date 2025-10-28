@@ -314,7 +314,6 @@ export function manageTelemetrySettings(
   oTelEndpoint = 'http://localhost:4317',
   target = 'local',
   originalSandboxSettingToRestore,
-  otlpProtocol = 'grpc',
 ) {
   const workspaceSettings = readJsonFile(WORKSPACE_SETTINGS_FILE);
   const currentSandboxSetting = workspaceSettings.sandbox;
@@ -345,11 +344,6 @@ export function manageTelemetrySettings(
       settingsModified = true;
       console.log(`🎯 Set telemetry target to ${target}.`);
     }
-    if (workspaceSettings.telemetry.otlpProtocol !== otlpProtocol) {
-      workspaceSettings.telemetry.otlpProtocol = otlpProtocol;
-      settingsModified = true;
-      console.log(`🔧 Set telemetry OTLP protocol to ${otlpProtocol}.`);
-    }
   } else {
     if (workspaceSettings.telemetry.enabled === true) {
       delete workspaceSettings.telemetry.enabled;
@@ -365,11 +359,6 @@ export function manageTelemetrySettings(
       delete workspaceSettings.telemetry.target;
       settingsModified = true;
       console.log('🎯 Cleared telemetry target.');
-    }
-    if (workspaceSettings.telemetry.otlpProtocol) {
-      delete workspaceSettings.telemetry.otlpProtocol;
-      settingsModified = true;
-      console.log('🔧 Cleared telemetry OTLP protocol.');
     }
     if (Object.keys(workspaceSettings.telemetry).length === 0) {
       delete workspaceSettings.telemetry;
@@ -410,7 +399,7 @@ export function registerCleanup(
 
     console.log('\n👋 Shutting down...');
 
-    manageTelemetrySettings(false, null, null, originalSandboxSetting);
+    manageTelemetrySettings(false, null, originalSandboxSetting);
 
     const processes = getProcesses ? getProcesses() : [];
     processes.forEach((proc) => {

@@ -28,12 +28,12 @@ async function getMcpServersFromConfig(): Promise<
 > {
   const settings = loadSettings();
   const extensionManager = new ExtensionManager({
-    settings: settings.merged,
+    loadedSettings: settings,
     workspaceDir: process.cwd(),
     requestConsent: requestConsentNonInteractive,
     requestSetting: promptForSetting,
   });
-  const extensions = await extensionManager.loadExtensions();
+  const extensions = extensionManager.loadExtensions();
   const mcpServers = { ...(settings.merged.mcpServers || {}) };
   for (const extension of extensions) {
     Object.entries(extension.mcpServers || {}).forEach(([key, server]) => {

@@ -17,10 +17,7 @@ import type {
   ServerGeminiToolCallRequestEvent,
   Config,
 } from '@google/gemini-cli-core';
-import {
-  GeminiEventType,
-  SimpleExtensionLoader,
-} from '@google/gemini-cli-core';
+import { GeminiEventType } from '@google/gemini-cli-core';
 import { v4 as uuidv4 } from 'uuid';
 
 import { logger } from '../utils/logger.js';
@@ -99,11 +96,7 @@ export class CoderAgentExecutor implements AgentExecutor {
     loadEnvironment(); // Will override any global env with workspace envs
     const settings = loadSettings(workspaceRoot);
     const extensions = loadExtensions(workspaceRoot);
-    return await loadConfig(
-      settings,
-      new SimpleExtensionLoader(extensions),
-      taskId,
-    );
+    return await loadConfig(settings, extensions, taskId);
   }
 
   /**

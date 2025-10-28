@@ -78,6 +78,7 @@ export const useConfirmUpdateRequests = () => {
 };
 
 export const useExtensionUpdates = (
+  extensions: GeminiCLIExtension[],
   extensionManager: ExtensionManager,
   addItem: UseHistoryManagerReturn['addItem'],
 ) => {
@@ -85,7 +86,6 @@ export const useExtensionUpdates = (
     extensionUpdatesReducer,
     initialExtensionUpdatesState,
   );
-  const extensions = extensionManager.getExtensions();
 
   useEffect(() => {
     const extensionsToCheck = extensions.filter((extension) => {

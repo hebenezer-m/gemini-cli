@@ -72,15 +72,11 @@ class DiscoveredMCPToolInvocation extends BaseToolInvocation<
     readonly trust?: boolean,
     params: ToolParams = {},
     private readonly cliConfig?: Config,
-    messageBus?: MessageBus,
   ) {
-    // Use composite format for policy checks: serverName__toolName
-    // This enables server wildcards (e.g., "google-workspace__*")
-    // while still allowing specific tool rules
-    super(params, messageBus, `${serverName}__${serverToolName}`, displayName);
+    super(params);
   }
 
-  protected override async getConfirmationDetails(
+  override async shouldConfirmExecute(
     _abortSignal: AbortSignal,
   ): Promise<ToolCallConfirmationDetails | false> {
     const serverAllowListKey = this.serverName;
@@ -219,7 +215,6 @@ export class DiscoveredMCPTool extends BaseDeclarativeTool<
     nameOverride?: string,
     private readonly cliConfig?: Config,
     override readonly extensionId?: string,
-    messageBus?: MessageBus,
   ) {
     super(
       nameOverride ?? generateValidName(serverToolName),
@@ -228,8 +223,8 @@ export class DiscoveredMCPTool extends BaseDeclarativeTool<
       Kind.Other,
       parameterSchema,
       true, // isOutputMarkdown
-      false, // canUpdateOutput,
-      messageBus,
+      false, // canUpdateOutput
+      undefined, // messageBus
       extensionId,
     );
   }
@@ -245,7 +240,6 @@ export class DiscoveredMCPTool extends BaseDeclarativeTool<
       `${this.serverName}__${this.serverToolName}`,
       this.cliConfig,
       this.extensionId,
-      this.messageBus,
     );
   }
 
@@ -263,7 +257,6 @@ export class DiscoveredMCPTool extends BaseDeclarativeTool<
       this.trust,
       params,
       this.cliConfig,
-      _messageBus,
     );
   }
 }

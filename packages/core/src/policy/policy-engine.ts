@@ -11,7 +11,6 @@ import {
   type PolicyRule,
 } from './types.js';
 import { stableStringify } from './stable-stringify.js';
-import { debugLogger } from '../utils/debugLogger.js';
 
 function ruleMatches(
   rule: PolicyRule,
@@ -72,24 +71,14 @@ export class PolicyEngine {
       stringifiedArgs = stableStringify(toolCall.args);
     }
 
-    debugLogger.debug(
-      `[PolicyEngine.check] toolCall.name: ${toolCall.name}, stringifiedArgs: ${stringifiedArgs}`,
-    );
-
     // Find the first matching rule (already sorted by priority)
     for (const rule of this.rules) {
       if (ruleMatches(rule, toolCall, stringifiedArgs)) {
-        debugLogger.debug(
-          `[PolicyEngine.check] MATCHED rule: toolName=${rule.toolName}, decision=${rule.decision}, priority=${rule.priority}, argsPattern=${rule.argsPattern?.source || 'none'}`,
-        );
         return this.applyNonInteractiveMode(rule.decision);
       }
     }
 
     // No matching rule found, use default decision
-    debugLogger.debug(
-      `[PolicyEngine.check] NO MATCH - using default decision: ${this.defaultDecision}`,
-    );
     return this.applyNonInteractiveMode(this.defaultDecision);
   }
 

@@ -199,7 +199,7 @@ class GrepToolInvocation extends BaseToolInvocation<
         returnDisplay: `Found ${matchCount} ${matchTerm}`,
       };
     } catch (error) {
-      debugLogger.warn(`Error during GrepLogic execution: ${error}`);
+      console.error(`Error during GrepLogic execution: ${error}`);
       const errorMessage = getErrorMessage(error);
       return {
         llmContent: `Error during grep search operation: ${errorMessage}`,
@@ -552,7 +552,7 @@ class GrepToolInvocation extends BaseToolInvocation<
 
       return allMatches;
     } catch (error: unknown) {
-      debugLogger.warn(
+      console.error(
         `GrepLogic: Error in performGrepSearch (Strategy: ${strategyUsed}): ${getErrorMessage(
           error,
         )}`,

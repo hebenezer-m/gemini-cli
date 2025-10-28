@@ -157,16 +157,14 @@ export async function checkForExtensionUpdate(
 ): Promise<ExtensionUpdateState> {
   const installMetadata = extension.installMetadata;
   if (installMetadata?.type === 'local') {
-    const latestConfig = extensionManager.loadExtensionConfig(
-      installMetadata.source,
-    );
-    if (!latestConfig) {
+    const newExtension = extensionManager.loadExtension(installMetadata.source);
+    if (!newExtension) {
       debugLogger.error(
         `Failed to check for update for local extension "${extension.name}". Could not load extension from source path: ${installMetadata.source}`,
       );
       return ExtensionUpdateState.ERROR;
     }
-    if (latestConfig.version !== extension.version) {
+    if (newExtension.version !== extension.version) {
       return ExtensionUpdateState.UPDATE_AVAILABLE;
     }
     return ExtensionUpdateState.UP_TO_DATE;

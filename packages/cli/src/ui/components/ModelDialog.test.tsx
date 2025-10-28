@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { render, cleanup } from 'ink-testing-library';
+/** @vitest-environment jsdom */
+
+import { render, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   DEFAULT_GEMINI_FLASH_LITE_MODEL,
@@ -80,12 +82,12 @@ describe('<ModelDialog />', () => {
   });
 
   it('renders the title and help text', () => {
-    const { lastFrame } = renderComponent();
-    expect(lastFrame()).toContain('Select Model');
-    expect(lastFrame()).toContain('(Press Esc to close)');
-    expect(lastFrame()).toContain(
-      '> To use a specific Gemini model, use the --model flag.',
-    );
+    const { getByText } = renderComponent();
+    expect(getByText('Select Model')).toBeDefined();
+    expect(getByText('(Press Esc to close)')).toBeDefined();
+    expect(
+      getByText('> To use a specific Gemini model, use the --model flag.'),
+    ).toBeDefined();
   });
 
   it('passes all model options to DescriptiveRadioButtonSelect', () => {

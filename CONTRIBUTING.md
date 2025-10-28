@@ -1,18 +1,6 @@
 # How to Contribute
 
-We would love to accept your patches and contributions to this project. This
-document includes:
-
-- **[Before you begin](#before-you-begin):** Essential steps to take before
-  becoming a Gemini CLI contributor.
-- **[Code contribution process](#code-contribution-process):** How to contribute
-  code to Gemini CLI.
-- **[Development setup and workflow](#development-setup-and-workflow):** How to
-  set up your development environment and workflow.
-- **[Documentation contribution process](#documentation-contribution-process):**
-  How to contribute documentation to Gemini CLI.
-
-We're looking forward to seeing your contributions!
+We would love to accept your patches and contributions to this project.
 
 ## Before you begin
 
@@ -35,25 +23,15 @@ sign a new one.
 This project follows
 [Google's Open Source Community Guidelines](https://opensource.google/conduct/).
 
-## Code contribution process
+## Contribution Process
 
-### Get started
-
-The process for contributing code is as follows:
-
-1.  **Find an issue** that you want to work on.
-2.  **Fork the repository** and create a new branch.
-3.  **Make your changes** in the `packages/` directory.
-4.  **Ensure all checks pass** by running `npm run preflight`.
-5.  **Open a pull request** with your changes.
-
-### Code reviews
+### Code Reviews
 
 All submissions, including submissions by project members, require review. We
 use [GitHub pull requests](https://docs.github.com/articles/about-pull-requests)
 for this purpose.
 
-### Self assigning issues
+### Self Assigning Issues
 
 If you're looking for an issue to work on, check out our list of issues that are
 labeled
@@ -66,12 +44,12 @@ assign the issue to you, provided it is not already assigned.
 Please note that you can have a maximum of 3 issues assigned to you at any given
 time.
 
-### Pull request guidelines
+### Pull Request Guidelines
 
 To help us review and merge your PRs quickly, please follow these guidelines.
 PRs that do not meet these standards may be closed.
 
-#### 1. Link to an existing issue
+#### 1. Link to an Existing Issue
 
 All PRs should be linked to an existing issue in our tracker. This ensures that
 every change has been discussed and is aligned with the project's goals before
@@ -84,7 +62,7 @@ any code is written.
 If an issue for your change doesn't exist, please **open one first** and wait
 for feedback before you start coding.
 
-#### 2. Keep it small and focused
+#### 2. Keep It Small and Focused
 
 We favor small, atomic PRs that address a single issue or add a single,
 self-contained feature.
@@ -96,40 +74,37 @@ self-contained feature.
 Large changes should be broken down into a series of smaller, logical PRs that
 can be reviewed and merged independently.
 
-#### 3. Use draft PRs for work in progress
+#### 3. Use Draft PRs for Work in Progress
 
 If you'd like to get early feedback on your work, please use GitHub's **Draft
 Pull Request** feature. This signals to the maintainers that the PR is not yet
 ready for a formal review but is open for discussion and initial feedback.
 
-#### 4. Ensure all checks pass
+#### 4. Ensure All Checks Pass
 
 Before submitting your PR, ensure that all automated checks are passing by
 running `npm run preflight`. This command runs all tests, linting, and other
 style checks.
 
-#### 5. Update documentation
+#### 5. Update Documentation
 
 If your PR introduces a user-facing change (e.g., a new command, a modified
 flag, or a change in behavior), you must also update the relevant documentation
 in the `/docs` directory.
 
-See more about writing documentation:
-[Documentation contribution process](#documentation-contribution-process).
-
-#### 6. Write clear commit messages and a good PR description
+#### 6. Write Clear Commit Messages and a Good PR Description
 
 Your PR should have a clear, descriptive title and a detailed description of the
 changes. Follow the [Conventional Commits](https://www.conventionalcommits.org/)
 standard for your commit messages.
 
-- **Good PR title:** `feat(cli): Add --json flag to 'config get' command`
-- **Bad PR title:** `Made some changes`
+- **Good PR Title:** `feat(cli): Add --json flag to 'config get' command`
+- **Bad PR Title:** `Made some changes`
 
 In the PR description, explain the "why" behind your changes and link to the
 relevant issue (e.g., `Fixes #123`).
 
-### Forking
+## Forking
 
 If you are forking the repository you will be able to run the Build, Test and
 Integration test workflows. However in order to make the integration tests run
@@ -143,12 +118,12 @@ Additionally you will need to click on the `Actions` tab and enable workflows
 for your repository, you'll find it's the large blue button in the center of the
 screen.
 
-### Development setup and workflow
+## Development Setup and Workflow
 
 This section guides contributors on how to build, modify, and understand the
 development setup of this project.
 
-### Setting up the development environment
+### Setting Up the Development Environment
 
 **Prerequisites:**
 
@@ -160,7 +135,7 @@ development setup of this project.
       version of Node.js `>=20` is acceptable.
 2.  **Git**
 
-### Build process
+### Build Process
 
 To clone the repository:
 
@@ -185,7 +160,7 @@ This command typically compiles TypeScript to JavaScript, bundles assets, and
 prepares the packages for execution. Refer to `scripts/build.js` and
 `package.json` scripts for more details on what happens during the build.
 
-### Enabling sandboxing
+### Enabling Sandboxing
 
 [Sandboxing](#sandboxing) is highly recommended and requires, at a minimum,
 setting `GEMINI_SANDBOX=true` in your `~/.env` and ensuring a sandboxing
@@ -201,7 +176,7 @@ npm run build:all
 
 To skip building the sandbox container, you can use `npm run build` instead.
 
-### Running the CLI
+### Running
 
 To start the Gemini CLI from the source code (after building), run the following
 command from the root directory:
@@ -215,11 +190,11 @@ utilize `npm link path/to/gemini-cli/packages/cli` (see:
 [docs](https://docs.npmjs.com/cli/v9/commands/npm-link)) or
 `alias gemini="node path/to/gemini-cli/packages/cli"` to run with `gemini`
 
-### Running tests
+### Running Tests
 
 This project contains two types of tests: unit tests and integration tests.
 
-#### Unit tests
+#### Unit Tests
 
 To execute the unit test suite for the project:
 
@@ -231,7 +206,7 @@ This will run tests located in the `packages/core` and `packages/cli`
 directories. Ensure tests pass before submitting any changes. For a more
 comprehensive check, it is recommended to run `npm run preflight`.
 
-#### Integration tests
+#### Integration Tests
 
 The integration tests are designed to validate the end-to-end functionality of
 the Gemini CLI. They are not run as part of the default `npm run test` command.
@@ -245,7 +220,7 @@ npm run test:e2e
 For more detailed information on the integration testing framework, please see
 the [Integration Tests documentation](./docs/integration-tests.md).
 
-### Linting and preflight checks
+### Linting and Preflight Checks
 
 To ensure code quality and formatting consistency, run the preflight check:
 
@@ -292,7 +267,7 @@ root directory:
 npm run lint
 ```
 
-### Coding conventions
+### Coding Conventions
 
 - Please adhere to the coding style, patterns, and conventions used throughout
   the existing codebase.
@@ -304,7 +279,7 @@ npm run lint
 - **Imports:** Pay special attention to import paths. The project uses ESLint to
   enforce restrictions on relative imports between packages.
 
-### Project structure
+### Project Structure
 
 - `packages/`: Contains the individual sub-packages of the project.
   - `a2a-server`: A2A server implementation for the Gemini CLI. (Experimental)
@@ -319,9 +294,9 @@ npm run lint
 
 For more detailed architecture, see `docs/architecture.md`.
 
-### Debugging
+## Debugging
 
-#### VS Code
+### VS Code:
 
 0.  Run the CLI to interactively debug in VS Code with `F5`
 1.  Start the CLI in debug mode from the root directory:
@@ -379,9 +354,9 @@ used for the CLI's interface, is compatible with React DevTools version 4.x.
     Your running CLI application should then connect to React DevTools.
     ![](/docs/assets/connected_devtools.png)
 
-### Sandboxing
+## Sandboxing
 
-#### macOS Seatbelt
+### macOS Seatbelt
 
 On macOS, `gemini` uses Seatbelt (`sandbox-exec`) under a `permissive-open`
 profile (see `packages/cli/src/utils/sandbox-macos-permissive-open.sb`) that
@@ -397,7 +372,7 @@ Available built-in profiles are `{permissive,restrictive}-{open,closed,proxied}`
 `.gemini/sandbox-macos-<profile>.sb` under your project settings directory
 `.gemini`.
 
-#### Container-based sandboxing (all platforms)
+### Container-based Sandboxing (All Platforms)
 
 For stronger container-based sandboxing on macOS or other platforms, you can set
 `GEMINI_SANDBOX=true|docker|podman|<command>` in your environment or `.env`
@@ -420,7 +395,7 @@ for your projects by creating the files `.gemini/sandbox.Dockerfile` and/or
 running `gemini` with `BUILD_SANDBOX=1` to trigger building of your custom
 sandbox.
 
-#### Proxied networking
+#### Proxied Networking
 
 All sandboxing methods, including macOS Seatbelt using `*-proxied` profiles,
 support restricting outbound network traffic through a custom proxy server that
@@ -431,7 +406,7 @@ connections to `example.com:443` (e.g. `curl https://example.com`) and declines
 all other requests. The proxy is started and stopped automatically alongside the
 sandbox.
 
-### Manual publish
+## Manual Publish
 
 We publish an artifact for each commit to our internal registry. But if you need
 to manually cut a local build, then run the following commands:
@@ -443,91 +418,3 @@ npm run auth
 npm run prerelease:dev
 npm publish --workspaces
 ```
-
-## Documentation contribution process
-
-Our documentation must be kept up-to-date with our code contributions. We want
-our documentation to be clear, concise, and helpful to our users. We value:
-
-- **Clarity:** Use simple and direct language. Avoid jargon where possible.
-- **Accuracy:** Ensure all information is correct and up-to-date.
-- **Completeness:** Cover all aspects of a feature or topic.
-- **Examples:** Provide practical examples to help users understand how to use
-  Gemini CLI.
-
-### Getting started
-
-The process for contributing to the documentation is similar to contributing
-code.
-
-1. **Fork the repository** and create a new branch.
-2. **Make your changes** in the `/docs` directory.
-3. **Preview your changes locally** in Markdown rendering.
-4. **Lint and format your changes.** Our preflight check includes linting and
-   formatting for documentation files.
-   ```bash
-   npm run preflight
-   ```
-5. **Open a pull request** with your changes.
-
-### Documentation structure
-
-Our documentation is organized using [sidebar.json](docs/sidebar.json) as the
-table of contents. When adding new documentation:
-
-1. Create your markdown file **in the appropriate directory** under `/docs`.
-2. Add an entry to `sidebar.json` in the relevant section.
-3. Ensure all internal links use relative paths and point to existing files.
-
-### Style guide
-
-We follow the
-[Google Developer Documentation Style Guide](https://developers.google.com/style).
-Please refer to it for guidance on writing style, tone, and formatting.
-
-#### Key style points
-
-- Use sentence case for headings.
-- Write in second person ("you") when addressing the reader.
-- Use present tense.
-- Keep paragraphs short and focused.
-- Use code blocks with appropriate language tags for syntax highlighting.
-- Include practical examples whenever possible.
-
-### Linting and formatting
-
-We use `prettier` to enforce a consistent style across our documentation. The
-`npm run preflight` command will check for any linting issues.
-
-You can also run the linter and formatter separately:
-
-- `npm run lint` - Check for linting issues
-- `npm run format` - Auto-format markdown files
-- `npm run lint:fix` - Auto-fix linting issues where possible
-
-Please make sure your contributions are free of linting errors before submitting
-a pull request.
-
-### Before you submit
-
-Before submitting your documentation pull request, please:
-
-1. Run `npm run preflight` to ensure all checks pass.
-2. Review your changes for clarity and accuracy.
-3. Check that all links work correctly.
-4. Ensure any code examples are tested and functional.
-5. Sign the
-   [Contributor License Agreement (CLA)](https://cla.developers.google.com/) if
-   you haven't already.
-
-### Need help?
-
-If you have questions about contributing documentation:
-
-- Check our [FAQ](docs/faq.md).
-- Review existing documentation for examples.
-- Open [an issue](https://github.com/google-gemini/gemini-cli/issues) to discuss
-  your proposed changes.
-- Reach out to the maintainers.
-
-We appreciate your contributions to making Gemini CLI documentation better!

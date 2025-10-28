@@ -413,21 +413,18 @@ export class LoopDetectionService {
     const schema: Record<string, unknown> = {
       type: 'object',
       properties: {
-        unproductive_state_analysis: {
+        reasoning: {
           type: 'string',
           description:
             'Your reasoning on if the conversation is looping without forward progress.',
         },
-        unproductive_state_confidence: {
+        confidence: {
           type: 'number',
           description:
             'A number between 0.0 and 1.0 representing your confidence that the conversation is in an unproductive state.',
         },
       },
-      required: [
-        'unproductive_state_analysis',
-        'unproductive_state_confidence',
-      ],
+      required: ['reasoning', 'confidence'],
     };
     let result;
     try {
@@ -445,13 +442,10 @@ export class LoopDetectionService {
       return false;
     }
 
-    if (typeof result['unproductive_state_confidence'] === 'number') {
-      if (result['unproductive_state_confidence'] > 0.9) {
-        if (
-          typeof result['unproductive_state_analysis'] === 'string' &&
-          result['unproductive_state_analysis']
-        ) {
-          debugLogger.warn(result['unproductive_state_analysis']);
+    if (typeof result['confidence'] === 'number') {
+      if (result['confidence'] > 0.9) {
+        if (typeof result['reasoning'] === 'string' && result['reasoning']) {
+          debugLogger.warn(result['reasoning']);
         }
         logLoopDetected(
           this.config,
@@ -462,7 +456,7 @@ export class LoopDetectionService {
         this.llmCheckInterval = Math.round(
           MIN_LLM_CHECK_INTERVAL +
             (MAX_LLM_CHECK_INTERVAL - MIN_LLM_CHECK_INTERVAL) *
-              (1 - result['unproductive_state_confidence']),
+              (1 - result['confidence']),
         );
       }
     }

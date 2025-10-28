@@ -34,10 +34,10 @@ export async function handleUpdate(args: UpdateArgs) {
     workspaceDir,
     requestConsent: requestConsentNonInteractive,
     requestSetting: promptForSetting,
-    settings: loadSettings(workspaceDir).merged,
+    loadedSettings: loadSettings(workspaceDir),
   });
 
-  const extensions = await extensionManager.loadExtensions();
+  const extensions = extensionManager.loadExtensions();
   if (args.name) {
     try {
       const extension = extensions.find(

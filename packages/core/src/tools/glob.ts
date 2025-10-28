@@ -15,8 +15,6 @@ import { type Config } from '../config/config.js';
 import { DEFAULT_FILE_FILTERING_OPTIONS } from '../config/constants.js';
 import { ToolErrorType } from './tool-error.js';
 import { GLOB_TOOL_NAME } from './tool-names.js';
-import { getErrorMessage } from '../utils/errors.js';
-import { debugLogger } from '../utils/debugLogger.js';
 
 // Subset of 'Path' interface provided by 'glob' that we can implement for testing
 export interface GlobPath {
@@ -240,8 +238,9 @@ class GlobToolInvocation extends BaseToolInvocation<
         returnDisplay: `Found ${fileCount} matching file(s)`,
       };
     } catch (error) {
-      debugLogger.warn(`GlobLogic execute Error`, error);
-      const errorMessage = getErrorMessage(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.error(`GlobLogic execute Error: ${errorMessage}`, error);
       const rawError = `Error during glob search operation: ${errorMessage}`;
       return {
         llmContent: rawError,

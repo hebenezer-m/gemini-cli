@@ -11,6 +11,7 @@ import type {
   GeminiChat,
   ToolResult,
   ToolCallConfirmationDetails,
+  GeminiCLIExtension,
   FilterFilesOptions,
 } from '@google/gemini-cli-core';
 import {
@@ -62,6 +63,7 @@ export function resolveModel(model: string, isInFallbackMode: boolean): string {
 export async function runZedIntegration(
   config: Config,
   settings: LoadedSettings,
+  extensions: GeminiCLIExtension[],
   argv: CliArgs,
 ) {
   const stdout = Writable.toWeb(process.stdout) as WritableStream;
@@ -74,7 +76,8 @@ export async function runZedIntegration(
   console.debug = console.error;
 
   new acp.AgentSideConnection(
-    (client: acp.Client) => new GeminiAgent(config, settings, argv, client),
+    (client: acp.Client) =>
+      new GeminiAgent(config, settings, extensions, argv, client),
     stdout,
     stdin,
   );
@@ -87,6 +90,7 @@ class GeminiAgent {
   constructor(
     private config: Config,
     private settings: LoadedSettings,
+    private extensions: GeminiCLIExtension[],
     private argv: CliArgs,
     private client: acp.Client,
   ) {}
@@ -200,7 +204,13 @@ class GeminiAgent {
 
     const settings = { ...this.settings.merged, mcpServers: mergedMcpServers };
 
-    const config = await loadCliConfig(settings, sessionId, this.argv, cwd);
+    const config = await loadCliConfig(
+      settings,
+      this.extensions,
+      sessionId,
+      this.argv,
+      cwd,
+    );
 
     await config.initialize();
     return config;
