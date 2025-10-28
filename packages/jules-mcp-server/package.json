@@ -1,0 +1,21 @@
+{
+  "name": "@google/gemini-cli-jules-mcp-server",
+  "version": "1.0.0",
+  "description": "Jules MCP Server Extension for Gemini CLI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/google-gemini/gemini-cli.git",
+    "directory": "packages/jules-mcp-server"
+  },
+  "scripts": {
+    "build": "echo \"No build required for Python extension\""
+  },
+  "files": [
+    "README.md",
+    "gemini-extension.json",
+    "jules_api.py",
+    "pyproject.toml",
+    "server.py",
+    "uv.lock"
+  ]
+}
