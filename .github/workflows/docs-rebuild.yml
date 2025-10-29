@@ -10,8 +10,12 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: 'Trigger rebuild'
+        if: secrets.DOCS_REBUILD_URL != ''
         run: |
           curl -X POST \
             -H "Content-Type: application/json" \
             -d '{}' \
             "${{ secrets.DOCS_REBUILD_URL }}"
+      - name: 'Skip rebuild trigger'
+        if: secrets.DOCS_REBUILD_URL == ''
+        run: 'echo "Skipping docs rebuild trigger because secret DOCS_REBUILD_URL is not set."'
