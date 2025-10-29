@@ -1,0 +1,327 @@
+linkChecker	UNKNOWN STEP	﻿2025-10-25T22:32:07.5258074Z Current runner version: '2.329.0'
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5281447Z ##[group]Runner Image Provisioner
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5282411Z Hosted Compute Agent
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5282951Z Version: 20250912.392
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5283663Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5284406Z Build Date: 2025-09-12T15:23:14Z
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5285031Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5285634Z ##[group]Operating System
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5286278Z Ubuntu
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5286769Z 24.04.3
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5287299Z LTS
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5287762Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5288302Z ##[group]Runner Image
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5288884Z Image: ubuntu-24.04
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5289479Z Version: 20250929.60.1
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5290540Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250929.60/images/ubuntu/Ubuntu2404-Readme.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5292435Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250929.60
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5293500Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5295963Z ##[group]GITHUB_TOKEN Permissions
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5298135Z Actions: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5298800Z Attestations: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5299346Z Checks: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5299883Z Contents: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5300455Z Deployments: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5300961Z Discussions: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5301530Z Issues: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5302262Z Metadata: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5302912Z Models: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5303421Z Packages: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5303949Z Pages: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5304513Z PullRequests: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5305080Z RepositoryProjects: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5305601Z SecurityEvents: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5306296Z Statuses: read
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5306850Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5308852Z Secret source: Dependabot
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5309693Z Prepare workflow directory
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5628115Z Prepare all required actions
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:07.5665967Z Getting action download info
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.0346234Z Download action repository 'actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8' (SHA:08c6903cd8c0fde910a37f88322edcfb5dd907a8)
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.2270735Z Download action repository 'lycheeverse/lychee-action@885c65f3dc543b57c898c8099f4e08c8afd178a2' (SHA:885c65f3dc543b57c898c8099f4e08c8afd178a2)
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.7587620Z Complete job name: linkChecker
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8340968Z ##[group]Run actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8342798Z with:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8343545Z   repository: hebenezer-m/gemini-cli
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8344767Z   token: ***
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8345466Z   ssh-strict: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8346198Z   ssh-user: git
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8346948Z   persist-credentials: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8347792Z   clean: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8348587Z   sparse-checkout-cone-mode: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8349507Z   fetch-depth: 1
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8350224Z   fetch-tags: false
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8350990Z   show-progress: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8352038Z   lfs: false
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8352877Z   submodules: false
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8353649Z   set-safe-directory: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.8354761Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9273848Z Syncing repository: hebenezer-m/gemini-cli
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9276470Z ##[group]Getting Git version info
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9277988Z Working directory is '/home/runner/work/gemini-cli/gemini-cli'
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9279920Z [command]/usr/bin/git version
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9322347Z git version 2.51.0
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9342753Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9356994Z Temporarily overriding HOME='/home/runner/work/_temp/8ee05358-93fb-45df-b64b-0c6adcee2263' before making global git config changes
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9360150Z Adding repository directory to the temporary git global config as a safe directory
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9363303Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/gemini-cli/gemini-cli
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9397458Z Deleting the contents of '/home/runner/work/gemini-cli/gemini-cli'
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9400313Z ##[group]Initializing the repository
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9404740Z [command]/usr/bin/git init /home/runner/work/gemini-cli/gemini-cli
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9519282Z hint: Using 'master' as the name for the initial branch. This default branch name
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9521207Z hint: is subject to change. To configure the initial branch name to use in all
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9523674Z hint: of your new repositories, which will suppress this warning, call:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9525442Z hint:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9526328Z hint: 	git config --global init.defaultBranch <name>
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9527417Z hint:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9528709Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9530412Z hint: 'development'. The just-created branch can be renamed via this command:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9532303Z hint:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9533439Z hint: 	git branch -m <name>
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9534294Z hint:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9535388Z hint: Disable this message with "git config set advice.defaultBranchName false"
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9537287Z Initialized empty Git repository in /home/runner/work/gemini-cli/gemini-cli/.git/
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9540232Z [command]/usr/bin/git remote add origin https://github.com/hebenezer-m/gemini-cli
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9603611Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9605319Z ##[group]Disabling automatic garbage collection
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9607484Z [command]/usr/bin/git config --local gc.auto 0
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9635517Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9636922Z ##[group]Setting up auth
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9640928Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:08.9672145Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.0011794Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.0044253Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.0261436Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.0293225Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.0294476Z ##[group]Fetching the repository
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.0304516Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5c99785db3362d977c7c2f454155cb07c1b27613:refs/remotes/pull/5/merge
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.8870936Z From https://github.com/hebenezer-m/gemini-cli
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.8871805Z  * [new ref]         5c99785db3362d977c7c2f454155cb07c1b27613 -> pull/5/merge
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.8902293Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.8903153Z ##[group]Determining the checkout info
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.8904806Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.8909921Z [command]/usr/bin/git sparse-checkout disable
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.8952587Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.8979030Z ##[group]Checking out the ref
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.8982880Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/5/merge
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9846333Z Note: switching to 'refs/remotes/pull/5/merge'.
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9846849Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9847265Z You are in 'detached HEAD' state. You can look around, make experimental
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9848226Z changes and commit them, and you can discard any commits you make in this
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9849151Z state without impacting any branches by switching back to a branch.
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9849723Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9850168Z If you want to create a new branch to retain commits you create, you may
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9851200Z do so (now or later) by using -c with the switch command. Example:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9852324Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9852651Z   git switch -c <new-branch-name>
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9853116Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9853339Z Or undo this operation with:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9853613Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9853804Z   git switch -
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9854080Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9854462Z Turn off this advice by setting config variable advice.detachedHead to false
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9854883Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9855341Z HEAD is now at 5c99785 Merge b138bf3795ecd9ab035d8694e87bc5cb7a9525eb into ee66732ad258f097455ca0664b7084a88a4586d1
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9858319Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9897738Z [command]/usr/bin/git log -1 --format=%H
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:09.9921640Z 5c99785db3362d977c7c2f454155cb07c1b27613
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0197201Z ##[group]Run lycheeverse/lychee-action@885c65f3dc543b57c898c8099f4e08c8afd178a2
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0197855Z with:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0198284Z   args: --verbose --no-progress ./**/*.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0198769Z   debug: false
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0199157Z   fail: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0199533Z   failIfEmpty: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0199920Z   format: markdown
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0200303Z   jobSummary: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0200692Z   lycheeVersion: v0.20.1
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0201106Z   output: lychee/out.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0201501Z   checkbox: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0202221Z   token: ***
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0202613Z   workingDirectory: .
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0203012Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0291155Z ##[group]Run echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0291745Z [36;1mecho "$HOME/.local/bin" >> "$GITHUB_PATH"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0292389Z [36;1mmkdir -p "$HOME/.local/bin"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0330833Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0331362Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0455518Z ##[group]Run # Remove any existing lychee binary to prevent conflicts
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0456165Z [36;1m# Remove any existing lychee binary to prevent conflicts[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0456684Z [36;1mrm -f "$HOME/.local/bin/lychee"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0490679Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0491179Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0660799Z ##[group]Run # Create a temporary directory for downloads and extraction
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0661528Z [36;1m# Create a temporary directory for downloads and extraction[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0662267Z [36;1mTEMP_DIR="${RUNNER_TEMP}/lychee-download"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0662714Z [36;1mmkdir -p "${TEMP_DIR}"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0663092Z [36;1mcd "${TEMP_DIR}"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0663426Z [36;1m[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0663727Z [36;1mARCH=$(uname -m)[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0664183Z [36;1m# Determine filename and download URL based on version[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0664697Z [36;1mif [[ "${LYCHEE_VERSION}" =~ ^v0\.0|^v0\.1[0-5]\. ]]; then[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0665259Z [36;1m  FILENAME="lychee-${LYCHEE_VERSION}-${ARCH}-unknown-linux-gnu.tar.gz"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0666064Z [36;1m  DOWNLOAD_URL="https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${FILENAME}"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0666686Z [36;1melse[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0667080Z [36;1m  FILENAME="lychee-${ARCH}-unknown-linux-gnu.tar.gz"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0667705Z [36;1m  if [[ "${LYCHEE_VERSION}" == 'nightly' ]]; then[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0668798Z [36;1m    DOWNLOAD_URL="https://github.com/lycheeverse/lychee/releases/download/nightly/${FILENAME}"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0669517Z [36;1m  elif [[ "${LYCHEE_VERSION}" == 'latest' ]]; then[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0670167Z [36;1m    DOWNLOAD_URL="https://github.com/lycheeverse/lychee/releases/latest/download/${FILENAME}"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0670772Z [36;1m  else[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0671380Z [36;1m    DOWNLOAD_URL="https://github.com/lycheeverse/lychee/releases/download/lychee-${LYCHEE_VERSION}/${FILENAME}"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0672232Z [36;1m  fi[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0672562Z [36;1mfi[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0673246Z [36;1m[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0673621Z [36;1mecho "Downloading from: ${DOWNLOAD_URL}"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0674088Z [36;1mcurl -sfLO "${DOWNLOAD_URL}"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0674486Z [36;1m[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0674824Z [36;1mecho "Extracting ${FILENAME}"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0675246Z [36;1mtar -xvzf "${FILENAME}"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0675696Z [36;1m[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0676095Z [36;1m# Output temp directory for use in later steps[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0676613Z [36;1mecho "temp_dir=${TEMP_DIR}" >> $GITHUB_OUTPUT[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0709375Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0709864Z env:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0710211Z   LYCHEE_VERSION: v0.20.1
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0710777Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.0792115Z Downloading from: https://github.com/lycheeverse/lychee/releases/download/lychee-v0.20.1/lychee-x86_64-unknown-linux-gnu.tar.gz
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.3388626Z Extracting lychee-x86_64-unknown-linux-gnu.tar.gz
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.3415331Z lychee
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5245186Z ##[group]Run # Install lychee from the temporary directory
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5245759Z [36;1m# Install lychee from the temporary directory[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5246372Z [36;1minstall -t "$HOME/.local/bin" -D "/home/runner/work/_temp/lychee-download/lychee"[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5282816Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5283330Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5569596Z ##[group]Run /home/runner/work/_actions/lycheeverse/lychee-action/885c65f3dc543b57c898c8099f4e08c8afd178a2/entrypoint.sh
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5570620Z [36;1m/home/runner/work/_actions/lycheeverse/lychee-action/885c65f3dc543b57c898c8099f4e08c8afd178a2/entrypoint.sh[0m
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5604906Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5605419Z env:
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5606009Z   INPUT_TOKEN: ***
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5606424Z   INPUT_ARGS: --verbose --no-progress ./**/*.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5606879Z   INPUT_DEBUG: false
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5607238Z   INPUT_FAIL: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5607584Z   INPUT_FAILIFEMPTY: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5607963Z   INPUT_FORMAT: markdown
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5608337Z   INPUT_JOBSUMMARY: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5608697Z   INPUT_CHECKBOX: true
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5609063Z   INPUT_OUTPUT: lychee/out.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.5609437Z ##[endgroup]
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7072263Z    [WARN ] Error creating request: InvalidPathToUri("/docs/cli/commands.md")
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7081026Z    [WARN ] Error creating request: InvalidPathToUri("/docs/cli/themes.md")
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7082980Z    [WARN ] Error creating request: InvalidPathToUri("/docs/get-started/configuration.md")
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7085954Z    [WARN ] Error creating request: InvalidPathToUri("/docs/quota-and-pricing.md")
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7228606Z [200] file:///home/runner/work/gemini-cli/gemini-cli/.gcp/release-docker.yml
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7232105Z [EXCLUDED] https://github.com/google-gemini/maintainers-gemini-cli/blob/main/npm.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7233518Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/get-started/configuration.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7234753Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tos-privacy.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7235910Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/extensions/index.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7237297Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/extensions/getting-started-extensions.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7238805Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/ide-integration/ide-companion-spec.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7240402Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/cli/trusted-folders.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7241723Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/get-started/examples.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7242876Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/cli/checkpointing.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7243700Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/ide-integration/index.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7244819Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tools/todos.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7245454Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/cli/telemetry.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7246098Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tools/multi-file.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7246732Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/cli/themes.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7247371Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tools/web-search.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7247991Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/core/index.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7248823Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/extensions/extension-releasing.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7249534Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/troubleshooting.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7250174Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/core/tools-api.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7250824Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/cli/token-caching.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7251485Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/core/memport.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7252326Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tools/file-system.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7252970Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tools/index.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7253595Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tools/mcp-server.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7254283Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/get-started/authentication.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7254955Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/architecture.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7255572Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/cli/commands.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7256176Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tools/memory.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7256831Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/get-started/configuration.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7257505Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/cli/enterprise.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7258158Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/get-started/index.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7258774Z [200] file:///home/runner/work/gemini-cli/gemini-cli/CONTRIBUTING.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7259361Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/cli/tutorials.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7259970Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/cli/index.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7260544Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/npm.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7261130Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tos-privacy.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7261726Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/releases.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7262505Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/faq.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7263123Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/get-started/installation.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7263792Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tools/web-fetch.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7264401Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/tools/shell.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.7264993Z [200] file:///home/runner/work/gemini-cli/gemini-cli/docs/cli/sandbox.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.8212554Z [200] https://policies.google.com/privacy
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.8596381Z [200] https://one.google.com/terms-of-service
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.8624402Z [200] https://cloud.google.com/vertex-ai/pricing
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.8830690Z [200] https://one.google.com/
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.9576217Z [200] https://docs.npmjs.com/cli/v10/using-npm/workspaces
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.9724016Z [200] https://semver.org/
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.9863329Z [200] https://developers.google.com/gemini-code-assist/resources/privacy-notice-gemini-code-assist-individuals
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:10.9893321Z [200] https://developers.google.com/gemini-code-assist/resources/privacy-notices
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.0062412Z [200] https://developers.google.com/gemini-code-assist/resources/quotas
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.0089810Z [200] https://developers.google.com/gemini-code-assist/resources/quotas#quotas-for-agent-mode-gemini-cli
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.0176825Z [200] https://policies.google.com/terms
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.0309558Z [200] https://github.com/google-gemini/gemini-cli/blob/main/LICENSE
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.0871085Z [200] https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview#quotas
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.0907661Z [200] https://github.com/google-gemini/gemini-cli/blob/main/docs/get-started/configuration.md#usage-statistics
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.0965625Z [200] https://codeassist.google/
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.1038277Z [200] https://cloud.google.com/gemini/docs/codeassist/overview
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.1127100Z [200] https://workspace.google.com/marketplace/app/github_for_google_chat/536184076190
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.1354126Z [200] https://github.com/google-gemini/gemini-cli/discussions/new?category=q-a
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.1392368Z [200] https://developers.google.com/gemini-code-assist/resources/quotas
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.1515002Z [200] https://developers.google.com/gemini-code-assist/resources/faqs
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.1607200Z [200] https://developers.google.com/gemini-code-assist/resources/privacy-notices
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.1708380Z [200] https://ai.google.dev/gemini-api/docs/rate-limits
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.1779238Z [200] https://ai.google.dev/gemini-api/docs
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.2017314Z [200] https://cloud.google.com/vertex-ai/generative-ai/docs/reference/rest
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.2039765Z [200] https://ai.google.dev/gemini-api/terms
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.2422121Z [200] https://github.com/google-gemini/gemini-cli/discussions/categories/q-a
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.2489174Z [200] https://github.com/google-gemini/gemini-cli/actions/workflows/release-manual.yml
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.2547923Z [200] https://ai.google.dev/gemini-api/terms#unpaid-services
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.2563657Z [200] https://goo.gle/set-up-gemini-code-assist
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.2632387Z [200] http://aistudio.google.com/app/apikey
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.2670379Z [200] https://cloud.google.com/terms/cloud-privacy-notice
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.2686427Z [200] https://cloud.google.com/vertex-ai/generative-ai/docs/resources/dynamic-shared-quota
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.3186669Z [200] https://cloud.google.com/terms
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.3735590Z [200] https://developers.google.com/gemini-code-assist/resources/privacy-notice-gemini-code-assist-individuals
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.4947183Z [200] https://github.com/google-gemini/gemini-cli/issues
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.6488194Z [200] https://ai.google.dev/gemini-api/terms#paid-services
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.7031234Z [200] https://cloud.google.com/gemini/docs/discover/set-up-gemini
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.7918913Z [200] https://ai.google.dev/gemini-api/docs/pricing
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.8465000Z [200] https://cloud.google.com/terms/service-terms/
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9586730Z [ERROR] https://cloud.google.com/products/gemini/pricing | Too many redirects: error following redirect for url (https://cloud.google.com/products/gemini/pricing)
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9688281Z # Summary
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9688615Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9688761Z | Status         | Count |
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9689146Z |----------------|-------|
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9689806Z | 🔍 Total       | 83    |
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9690250Z | ✅ Successful  | 81    |
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9690658Z | ⏳ Timeouts    | 0     |
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9691107Z | 🔀 Redirected  | 0     |
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9691537Z | 👻 Excluded    | 1     |
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9692126Z | ❓ Unknown     | 0     |
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9692574Z | 🚫 Errors      | 1     |
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9692976Z | ⛔ Unsupported | 0     |
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9693232Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9693400Z ## Errors per input
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9693605Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9693782Z ### Errors in ./docs/quota-and-pricing.md
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9694086Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9694919Z * [ERROR] <https://cloud.google.com/products/gemini/pricing> | Too many redirects: error following redirect for url (https://cloud.google.com/products/gemini/pricing)
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9696768Z 
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9763286Z ##[error]Process completed with exit code 2.
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:11.9897086Z Post job cleanup.
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.0655686Z [command]/usr/bin/git version
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.0723536Z git version 2.51.0
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.0759978Z Temporarily overriding HOME='/home/runner/work/_temp/04f648e3-8f13-4534-be14-a1da7a7562ce' before making global git config changes
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.0761142Z Adding repository directory to the temporary git global config as a safe directory
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.0765979Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/gemini-cli/gemini-cli
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.0800525Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.0831304Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.1054598Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.1075009Z http.https://github.com/.extraheader
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.1084918Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.1116955Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+linkChecker	UNKNOWN STEP	2025-10-25T22:32:12.1440433Z Cleaning up orphan processes

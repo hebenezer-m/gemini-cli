@@ -1,0 +1,49 @@
+trigger-rebuild	UNKNOWN STEP	﻿2025-10-24T00:43:20.9074871Z Current runner version: '2.329.0'
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9108809Z ##[group]Runner Image Provisioner
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9110074Z Hosted Compute Agent
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9111050Z Version: 20250912.392
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9112074Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9113283Z Build Date: 2025-09-12T15:23:14Z
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9114467Z ##[endgroup]
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9115708Z ##[group]Operating System
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9116635Z Ubuntu
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9117558Z 24.04.3
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9118329Z LTS
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9119133Z ##[endgroup]
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9120030Z ##[group]Runner Image
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9120938Z Image: ubuntu-24.04
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9121735Z Version: 20250929.60.1
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9123684Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250929.60/images/ubuntu/Ubuntu2404-Readme.md
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9126721Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250929.60
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9128608Z ##[endgroup]
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9133246Z ##[group]GITHUB_TOKEN Permissions
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9136298Z Actions: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9137168Z Attestations: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9138413Z Checks: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9139378Z Contents: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9140342Z Deployments: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9141378Z Discussions: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9142326Z Issues: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9143337Z Metadata: read
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9144232Z Models: read
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9145354Z Packages: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9146195Z Pages: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9147240Z PullRequests: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9148122Z RepositoryProjects: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9149170Z SecurityEvents: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9150335Z Statuses: write
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9151174Z ##[endgroup]
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9154840Z Secret source: Actions
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9155933Z Prepare workflow directory
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9641680Z Prepare all required actions
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:20.9782686Z Complete job name: trigger-rebuild
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:21.0633578Z ##[group]Run curl -X POST \
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:21.0634308Z [36;1mcurl -X POST \[0m
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:21.0635190Z [36;1m  -H "Content-Type: application/json" \[0m
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:21.0635849Z [36;1m  -d '{}' \[0m
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:21.0636325Z [36;1m  ""[0m
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:21.2253903Z shell: /usr/bin/bash -e {0}
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:21.2255246Z ##[endgroup]
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:21.2501699Z curl: (3) URL rejected: Malformed input to a URL function
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:21.2520081Z ##[error]Process completed with exit code 3.
+trigger-rebuild	UNKNOWN STEP	2025-10-24T00:43:21.2630038Z Cleaning up orphan processes
